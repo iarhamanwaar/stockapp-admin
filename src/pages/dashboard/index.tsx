@@ -13,6 +13,7 @@ import {
   DollarOutlined,
   BankOutlined,
 } from "@ant-design/icons";
+import { PageLoading } from "../../components";
 
 const { Title } = Typography;
 
@@ -56,8 +57,13 @@ export const Dashboard: React.FC = () => {
     method: "get",
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading dashboard</div>;
+  if (isLoading) return <PageLoading tip="Loading dashboard data..." />;
+  if (error) return (
+    <div style={{ padding: '24px', textAlign: 'center', color: '#FF6060' }}>
+      <h3>Error loading dashboard</h3>
+      <p>Unable to load dashboard statistics. Please try again.</p>
+    </div>
+  );
 
   const stats = data?.data?.stats;
   const recentActivity = data?.data?.recentActivity;
@@ -66,68 +72,68 @@ export const Dashboard: React.FC = () => {
     {
       title: "Total Users",
       value: stats?.totalUsers || 0,
-      icon: <UserOutlined style={{ fontSize: 24, color: "#1890ff" }} />,
-      color: "#1890ff",
+      icon: <UserOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
+      color: "#3B1040",
     },
     {
       title: "Total Products",
       value: stats?.totalProducts || 0,
-      icon: <ProductOutlined style={{ fontSize: 24, color: "#52c41a" }} />,
-      color: "#52c41a",
+      icon: <ProductOutlined style={{ fontSize: 24, color: "#50287D" }} />,
+      color: "#50287D",
     },
     {
       title: "Total Orders",
       value: stats?.totalOrders || 0,
-      icon: <ShoppingCartOutlined style={{ fontSize: 24, color: "#faad14" }} />,
-      color: "#faad14",
+      icon: <ShoppingCartOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
+      color: "#6A0DAD",
     },
     {
       title: "Total Images",
       value: stats?.totalImages || 0,
-      icon: <FileImageOutlined style={{ fontSize: 24, color: "#722ed1" }} />,
-      color: "#722ed1",
+      icon: <FileImageOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
+      color: "#3B1040",
     },
     {
       title: "Categories",
       value: stats?.totalCategories || 0,
-      icon: <TagOutlined style={{ fontSize: 24, color: "#eb2f96" }} />,
-      color: "#eb2f96",
+      icon: <TagOutlined style={{ fontSize: 24, color: "#50287D" }} />,
+      color: "#50287D",
     },
     {
       title: "Sellers",
       value: stats?.totalSellers || 0,
-      icon: <ShopOutlined style={{ fontSize: 24, color: "#f5222d" }} />,
-      color: "#f5222d",
+      icon: <ShopOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
+      color: "#6A0DAD",
     },
     {
       title: "Buyers",
       value: stats?.totalBuyers || 0,
-      icon: <UserOutlined style={{ fontSize: 24, color: "#13c2c2" }} />,
-      color: "#13c2c2",
+      icon: <UserOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
+      color: "#3B1040",
     },
     {
       title: "Riders",
       value: stats?.totalRiders || 0,
-      icon: <TruckOutlined style={{ fontSize: 24, color: "#fa8c16" }} />,
-      color: "#fa8c16",
+      icon: <TruckOutlined style={{ fontSize: 24, color: "#50287D" }} />,
+      color: "#50287D",
     },
     {
       title: "Reviews",
       value: stats?.totalReviews || 0,
-      icon: <StarOutlined style={{ fontSize: 24, color: "#fadb14" }} />,
-      color: "#fadb14",
+      icon: <StarOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
+      color: "#6A0DAD",
     },
     {
       title: "Transactions",
       value: stats?.totalTransactions || 0,
-      icon: <DollarOutlined style={{ fontSize: 24, color: "#52c41a" }} />,
-      color: "#52c41a",
+      icon: <DollarOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
+      color: "#3B1040",
     },
   ];
 
   return (
-    <div style={{ padding: "24px" }}>
-      <Title level={2}>Dashboard</Title>
+    <div style={{ padding: 0 }}>
+      <Title level={2} className="h2-semibold" style={{ marginBottom: 24, color: '#1A1A1A' }}>Dashboard</Title>
       
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {statCards.map((stat, index) => (

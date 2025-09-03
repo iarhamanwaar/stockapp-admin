@@ -7,9 +7,30 @@ import {
   useNotificationProvider,
 } from "@refinedev/antd";
 import { dataProvider } from "./dataProvider";
-import { App as AntdApp } from "antd";
+import { App as AntdApp, ConfigProvider } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import "@refinedev/antd/dist/reset.css";
+import "./styles/brand-variables.css";
+import "./styles/components.css";
+import { stockAppTheme } from "./styles/theme";
+import {
+  UserOutlined,
+  ShoppingOutlined,
+  ShoppingCartOutlined,
+  FileImageOutlined,
+  TagsOutlined,
+  HomeOutlined,
+  BuildOutlined,
+  ShopOutlined,
+  TeamOutlined,
+  CarOutlined,
+  StarOutlined,
+  DollarOutlined,
+  BellOutlined,
+  MessageOutlined,
+  BankOutlined,
+  DashboardOutlined
+} from "@ant-design/icons";
 
 import { ProductList, ProductShow, ProductEdit } from "./pages/products";
 import { UserList, UserShow, UserEdit } from "./pages/users";
@@ -29,13 +50,15 @@ import { ChatList, ChatShow } from "./pages/chats";
 import { MessageList, MessageShow } from "./pages/messages";
 import { BankList, BankShow, BankEdit } from "./pages/banks";
 import { Dashboard } from "./pages/dashboard";
+import { CustomSider } from "./components/layout";
 
 function App() {
   return (
     <BrowserRouter>
       <RefineKbarProvider>
-        <AntdApp>
-          <Refine
+        <ConfigProvider theme={stockAppTheme}>
+          <AntdApp>
+            <Refine
             dataProvider={dataProvider}
             notificationProvider={useNotificationProvider}
             resources={[
@@ -47,6 +70,7 @@ function App() {
                 show: "/users/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <UserOutlined />,
                 },
               },
               {
@@ -57,6 +81,7 @@ function App() {
                 show: "/products/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <ShoppingOutlined />,
                 },
               },
               {
@@ -67,6 +92,7 @@ function App() {
                 show: "/orders/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <ShoppingCartOutlined />,
                 },
               },
               {
@@ -77,6 +103,7 @@ function App() {
                 show: "/product-images/show/:id", 
                 meta: {
                   canDelete: true,
+                  icon: <FileImageOutlined />,
                 },
               },
               {
@@ -87,6 +114,7 @@ function App() {
                 show: "/categories/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <TagsOutlined />,
                 },
               },
               {
@@ -97,6 +125,7 @@ function App() {
                 show: "/business-types/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <HomeOutlined />,
                 },
               },
               {
@@ -107,6 +136,7 @@ function App() {
                 show: "/materials/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <BuildOutlined />,
                 },
               },
               {
@@ -117,6 +147,7 @@ function App() {
                 show: "/sellers/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <ShopOutlined />,
                 },
               },
               {
@@ -127,6 +158,7 @@ function App() {
                 show: "/buyers/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <TeamOutlined />,
                 },
               },
               {
@@ -137,6 +169,7 @@ function App() {
                 show: "/riders/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <CarOutlined />,
                 },
               },
               {
@@ -147,6 +180,7 @@ function App() {
                 show: "/product-reviews/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <StarOutlined />,
                 },
               },
               {
@@ -157,6 +191,7 @@ function App() {
                 show: "/seller-reviews/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <StarOutlined />,
                 },
               },
               {
@@ -167,6 +202,7 @@ function App() {
                 show: "/transactions/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <DollarOutlined />,
                 },
               },
               {
@@ -177,6 +213,7 @@ function App() {
                 show: "/notifications/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <BellOutlined />,
                 },
               },
               {
@@ -186,6 +223,7 @@ function App() {
                 show: "/chats/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <MessageOutlined />,
                 },
               },
               {
@@ -194,6 +232,7 @@ function App() {
                 show: "/messages/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <MessageOutlined />,
                 },
               },
               {
@@ -204,6 +243,7 @@ function App() {
                 show: "/banks/show/:id",
                 meta: {
                   canDelete: true,
+                  icon: <BankOutlined />,
                 },
               },
             ]}
@@ -212,12 +252,23 @@ function App() {
               warnWhenUnsavedChanges: true,
               useNewQueryKeys: true,
               projectId: "stockapp-admin",
+              title: {
+                text: "Stock App Admin",
+                icon: "📦",
+              },
             }}
           >
             <Routes>
               <Route
                 element={
-                  <ThemedLayoutV2>
+                  <ThemedLayoutV2
+                    Sider={(props) => <CustomSider {...props} />}
+                    initialSiderCollapsed={
+                      typeof window !== 'undefined' 
+                        ? JSON.parse(localStorage.getItem('siderCollapsed') || 'false')
+                        : false
+                    }
+                  >
                     <Outlet />
                   </ThemedLayoutV2>
                 }
@@ -293,8 +344,9 @@ function App() {
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
             </Routes>
-          </Refine>
-        </AntdApp>
+            </Refine>
+          </AntdApp>
+        </ConfigProvider>
       </RefineKbarProvider>
     </BrowserRouter>
   );

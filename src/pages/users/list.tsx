@@ -12,15 +12,17 @@ import {
   DateField,
 } from "@refinedev/antd";
 import { Table, Space } from "antd";
+import { PageLoading } from "../../components";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
+    resource: "user",
   });
 
   return (
     <List>
-      <Table {...tableProps} rowKey="id">
+      <Table {...tableProps} rowKey="id" loading={tableProps.loading}>
         <Table.Column dataIndex="id" title={"ID"} />
         <Table.Column dataIndex="email" title={"Email"} />
         <Table.Column dataIndex="role" title={"Role"} />
