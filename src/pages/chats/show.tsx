@@ -14,13 +14,15 @@ import { UserOutlined } from "@ant-design/icons";
 const { Title, Paragraph } = Typography;
 
 export const ChatShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "chats",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} resource="chats">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       

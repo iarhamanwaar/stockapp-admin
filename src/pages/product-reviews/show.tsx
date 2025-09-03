@@ -14,13 +14,15 @@ import { Typography, Rate } from "antd";
 const { Title, Paragraph } = Typography;
 
 export const ProductReviewShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "productreviews",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} canEdit canDelete resource="productreviews">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       <Title level={5}>{"Rating"}</Title>

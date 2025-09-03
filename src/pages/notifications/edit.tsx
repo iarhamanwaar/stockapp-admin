@@ -6,12 +6,14 @@ import { Form, Input, Select, Switch } from "antd";
 const { TextArea } = Input;
 
 export const NotificationEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps, queryResult } = useForm({
+    resource: "notifications",
+  });
 
   const notificationData = queryResult?.data?.data;
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete resource="notifications">
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Title"}

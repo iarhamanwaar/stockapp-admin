@@ -4,12 +4,14 @@ import { Edit, useForm } from "@refinedev/antd";
 import { Form, Input, Switch, Select, DatePicker } from "antd";
 
 export const BuyerEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps, queryResult } = useForm({
+    resource: "buyers",
+  });
 
   const buyerData = queryResult?.data?.data;
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete resource="buyers">
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"First Name"}

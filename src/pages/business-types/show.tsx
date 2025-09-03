@@ -14,13 +14,15 @@ import { Typography } from "antd";
 const { Title } = Typography;
 
 export const BusinessTypeShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "businesstypes",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} canEdit canDelete resource="businesstypes">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       <Title level={5}>{"Name"}</Title>

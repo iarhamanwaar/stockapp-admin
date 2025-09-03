@@ -14,13 +14,15 @@ import { Typography, Tag } from "antd";
 const { Title } = Typography;
 
 export const BankShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "banks",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} canEdit canDelete resource="banks">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       <Title level={5}>{"Bank Name"}</Title>

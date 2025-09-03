@@ -6,12 +6,14 @@ import { Form, Input, Switch, Rate } from "antd";
 const { TextArea } = Input;
 
 export const ProductReviewEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps, queryResult } = useForm({
+    resource: "productreviews",
+  });
 
   const reviewData = queryResult?.data?.data;
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete resource="productreviews">
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Rating"}

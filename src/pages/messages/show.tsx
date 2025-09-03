@@ -13,7 +13,9 @@ import { Typography, Tag, Card, Image } from "antd";
 const { Title, Paragraph } = Typography;
 
 export const MessageShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "messages",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
@@ -58,7 +60,7 @@ export const MessageShow: React.FC<IResourceComponentsProps> = () => {
   };
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} resource="messages">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       

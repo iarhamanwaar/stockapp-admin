@@ -7,11 +7,11 @@ import {
 import {
   useTable,
   List,
-  EditButton,
-  ShowButton,
   DateField,
 } from "@refinedev/antd";
-import { Table, Space } from "antd";
+import { Table, Space, Button } from "antd";
+import { EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import { PageLoading } from "../../components";
 
 export const UserList: React.FC<IResourceComponentsProps> = () => {
@@ -19,6 +19,8 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
     syncWithLocation: true,
     resource: "user",
   });
+  
+  const navigate = useNavigate();
 
   return (
     <List>
@@ -42,8 +44,17 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} />
-              <ShowButton hideText size="small" recordItemId={record.id} />
+              <Button 
+                type="primary" 
+                icon={<EditOutlined />} 
+                size="small"
+                onClick={() => navigate(`/users/edit/${record.id}`)}
+              />
+              <Button 
+                icon={<EyeOutlined />} 
+                size="small"
+                onClick={() => navigate(`/users/show/${record.id}`)}
+              />
             </Space>
           )}
         />

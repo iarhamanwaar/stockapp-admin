@@ -14,13 +14,15 @@ import { Typography, Tag } from "antd";
 const { Title, Paragraph } = Typography;
 
 export const NotificationShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    resource: "notifications",
+  });
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} canEdit canDelete resource="notifications">
       <Title level={5}>{"ID"}</Title>
       <TextField value={record?.id ?? ""} />
       <Title level={5}>{"Title"}</Title>

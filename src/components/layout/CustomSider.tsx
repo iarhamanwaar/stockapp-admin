@@ -6,8 +6,6 @@ const CustomSider: React.FC<RefineThemedLayoutV2SiderProps> = (props) => {
   return (
     <ThemedSiderV2
       {...props}
-      width={240}
-      collapsedWidth={80}
       Title={({ collapsed }) => (
         <div
           style={{

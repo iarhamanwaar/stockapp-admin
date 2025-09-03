@@ -4,10 +4,12 @@ import { Edit, useForm } from "@refinedev/antd";
 import { Form, Input } from "antd";
 
 export const ProductImageEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps } = useForm();
+  const { formProps, saveButtonProps } = useForm({
+    resource: "productimage",
+  });
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete resource="productimage">
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Image URL"}

@@ -74,7 +74,7 @@ export const ChatList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <ShowButton hideText size="small" recordItemId={record.id} />
+              <ShowButton hideText size="small" recordItemId={record.id} resource="chats" />
             </Space>
           )}
         />

@@ -45,8 +45,8 @@ export const BuyerList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>
-              <EditButton hideText size="small" recordItemId={record.id} />
-              <ShowButton hideText size="small" recordItemId={record.id} />
+              <EditButton hideText size="small" recordItemId={record.id} resource="buyers" />
+              <ShowButton hideText size="small" recordItemId={record.id} resource="buyers" />
             </Space>
           )}
         />

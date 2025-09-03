@@ -4,10 +4,12 @@ import { Edit, useForm } from "@refinedev/antd";
 import { Form, Select } from "antd";
 
 export const OrderEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps } = useForm();
+  const { formProps, saveButtonProps } = useForm({
+    resource: "order",
+  });
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete resource="order">
       <Form {...formProps} layout="vertical">
         <Form.Item
           label={"Status"}
