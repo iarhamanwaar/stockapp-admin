@@ -6,12 +6,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const BankShow: React.FC<IResourceComponentsProps> = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  
   const { queryResult } = useShow({
     resource: "banks",
+    id: id,
   });
   const { data, isLoading } = queryResult;
 

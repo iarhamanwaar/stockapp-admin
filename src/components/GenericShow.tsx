@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { LoadingCard } from "@/components/ui/loading";
 
 interface GenericShowProps extends IResourceComponentsProps {
   resource: string;
@@ -21,15 +22,73 @@ export const GenericShow: React.FC<GenericShowProps> = ({
   listPath 
 }) => {
   const navigate = useNavigate();
-  const { queryResult } = useShow({ resource });
-  const { data, isLoading } = queryResult;
+  const { id } = useParams();
+  
+  const { queryResult } = useShow({ 
+    resource,
+    id: id,
+  });
+  const { data, isLoading, error } = queryResult;
 
   const record = data?.data;
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading {title.toLowerCase()}...</div>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(listPath)}
+            >
+              <ArrowLeftIcon className="h-4 w-4 mr-2" />
+              Back to {title}
+            </Button>
+            <h1 className="text-2xl font-bold">{title} Details</h1>
+          </div>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Loading {title}...</CardTitle>
+            <CardDescription>Please wait while we fetch the {title.toLowerCase()} information</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LoadingCard lines={8} />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(listPath)}
+            >
+              <ArrowLeftIcon className="h-4 w-4 mr-2" />
+              Back to {title}
+            </Button>
+            <h1 className="text-2xl font-bold">{title} Details</h1>
+          </div>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Error Loading {title}</CardTitle>
+            <CardDescription>Unable to load {title.toLowerCase()} information. This might be because the backend API is not running.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-sm text-muted-foreground">
+              <p>Since we're using hardcoded authentication, the data endpoints are not available.</p>
+              <p>This page will work once connected to a real backend API.</p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

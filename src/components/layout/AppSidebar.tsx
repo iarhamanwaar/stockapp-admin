@@ -74,7 +74,6 @@ export const AppSidebar: React.FC = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => {
-                console.log('Menu item:', item.key, item.name, item.label);
                 const Icon = iconMap[item.key] || iconMap[item.name] || Squares2X2Icon;
                 const isActive = item.route === "/" 
                   ? location.pathname === "/"
