@@ -1,1 +1,2 @@
-export { default as CustomSider } from './CustomSider';
+export { AppLayout } from './AppLayout';
+export { AppSidebar } from './AppSidebar';
