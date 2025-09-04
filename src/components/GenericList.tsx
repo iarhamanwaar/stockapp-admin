@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { EyeIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, PencilIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { LoadingTable } from "@/components/ui/loading";
 
@@ -93,11 +93,20 @@ export const GenericList: React.FC<GenericListProps> = ({
     getRowModel,
     refineCore: {
       tableQueryResult: { data: tableData, isLoading },
+      current,
+      setCurrent,
+      pageCount,
+      pageSize,
+      setPageSize,
     },
   } = useTable({
     columns,
     refineCoreProps: {
       resource,
+      pagination: {
+        current: 1,
+        pageSize: 10,
+      },
     },
   });
 
@@ -159,6 +168,67 @@ export const GenericList: React.FC<GenericListProps> = ({
                   )}
                 </TableBody>
               </Table>
+            </div>
+          )}
+          {!isLoading && (
+            <div className="flex items-center justify-between space-x-6 lg:space-x-8 pt-4">
+              <div className="flex items-center space-x-2">
+                <p className="text-sm font-medium">Rows per page</p>
+                <select
+                  value={pageSize}
+                  onChange={(e) => setPageSize(Number(e.target.value))}
+                  className="h-8 w-[70px] rounded border border-input bg-background px-3 py-2 text-sm"
+                >
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      {pageSize}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                Page {current} of {pageCount || 1}
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  className="hidden h-8 w-8 p-0 lg:flex"
+                  onClick={() => setCurrent(1)}
+                  disabled={current === 1}
+                >
+                  <span className="sr-only">Go to first page</span>
+                  <ChevronLeftIcon className="h-4 w-4" />
+                  <ChevronLeftIcon className="h-4 w-4 -ml-2" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-8 w-8 p-0"
+                  onClick={() => setCurrent(current - 1)}
+                  disabled={current === 1}
+                >
+                  <span className="sr-only">Go to previous page</span>
+                  <ChevronLeftIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-8 w-8 p-0"
+                  onClick={() => setCurrent(current + 1)}
+                  disabled={current === pageCount}
+                >
+                  <span className="sr-only">Go to next page</span>
+                  <ChevronRightIcon className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="hidden h-8 w-8 p-0 lg:flex"
+                  onClick={() => setCurrent(pageCount || 1)}
+                  disabled={current === pageCount}
+                >
+                  <span className="sr-only">Go to last page</span>
+                  <ChevronRightIcon className="h-4 w-4" />
+                  <ChevronRightIcon className="h-4 w-4 -ml-2" />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>
