@@ -1,34 +1,49 @@
 import React from 'react';
-import { Spin } from 'antd';
+import { LoadingSpinner } from '@/components/ui/loading';
 
 interface PageLoadingProps {
   tip?: string;
+  fullPage?: boolean;
 }
 
-export const PageLoading: React.FC<PageLoadingProps> = ({ tip }) => {
+export const PageLoading: React.FC<PageLoadingProps> = ({ 
+  tip = "Loading...", 
+  fullPage = false 
+}) => {
+  const containerClasses = fullPage 
+    ? "min-h-screen flex items-center justify-center"
+    : "flex flex-col items-center justify-center min-h-[50vh]";
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '50vh',
-        gap: '16px',
-      }}
+    <div 
+      className={containerClasses}
+      style={fullPage ? { backgroundColor: "var(--bg-light-gray)" } : {}}
     >
-      <Spin size="large" />
-      {tip && (
-        <div
-          style={{
-            color: 'var(--text-medium)',
-            fontFamily: 'var(--font-family-text)',
-            fontSize: 'var(--font-size-p1)',
-          }}
+      <div className="flex flex-col items-center space-y-4">
+        {fullPage && (
+          <div className="flex items-center space-x-3 mb-2">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: "var(--brand-primary)" }}
+            >
+              <span className="text-white text-lg">📦</span>
+            </div>
+            <span
+              className="text-xl font-semibold"
+              style={{ color: "var(--text-dark)" }}
+            >
+              StockApp Admin
+            </span>
+          </div>
+        )}
+        <LoadingSpinner size="lg" />
+        <p
+          className="text-base font-medium"
+          style={{ color: "var(--text-medium)" }}
         >
           {tip}
-        </div>
-      )}
+        </p>
+      </div>
     </div>
   );
 };

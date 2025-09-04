@@ -3,17 +3,14 @@ import {
   IResourceComponentsProps,
   useShow,
 } from "@refinedev/core";
-import {
-  Show,
-  TextField,
-  DateField,
-  BooleanField,
-} from "@refinedev/antd";
-import { Typography, Tag } from "antd";
-
-const { Title } = Typography;
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export const RiderShow: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
   const { queryResult } = useShow({
     resource: "riders",
   });
@@ -21,30 +18,99 @@ export const RiderShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Loading rider...</div>
+      </div>
+    );
+  }
+
   return (
-    <Show isLoading={isLoading} canEdit canDelete resource="riders">
-      <Title level={5}>{"ID"}</Title>
-      <TextField value={record?.id ?? ""} />
-      <Title level={5}>{"First Name"}</Title>
-      <TextField value={record?.firstName} />
-      <Title level={5}>{"Last Name"}</Title>
-      <TextField value={record?.lastName} />
-      <Title level={5}>{"Email"}</Title>
-      <TextField value={record?.email} />
-      <Title level={5}>{"Phone"}</Title>
-      <TextField value={record?.phone} />
-      <Title level={5}>{"Vehicle Type"}</Title>
-      <TextField value={record?.vehicleType} />
-      <Title level={5}>{"Available"}</Title>
-      <BooleanField value={record?.isAvailable} />
-      <Title level={5}>{"Status"}</Title>
-      <Tag color={record?.status === 'active' ? 'green' : record?.status === 'inactive' ? 'red' : 'orange'}>
-        {record?.status?.toUpperCase()}
-      </Tag>
-      <Title level={5}>{"Created at"}</Title>
-      <DateField value={record?.createdAt} />
-      <Title level={5}>{"Updated at"}</Title>
-      <DateField value={record?.updatedAt} />
-    </Show>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/riders")}
+          >
+            <ArrowLeftIcon className="h-4 w-4 mr-2" />
+            Back to Riders
+          </Button>
+          <h1 className="text-2xl font-bold">Rider Details</h1>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/riders/edit/${record?.id}`)}
+          >
+            <PencilIcon className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Rider #{record?.id}</CardTitle>
+          <CardDescription>View rider information</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">ID</label>
+              <div className="text-sm">{record?.id || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Name</label>
+              <div className="text-sm">{record?.name || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Email</label>
+              <div className="text-sm">{record?.email || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Phone</label>
+              <div className="text-sm">{record?.phone || record?.phoneNumber || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Status</label>
+              <div className="text-sm">
+                <Badge variant={
+                  record?.status === 'active' ? 'default' : 
+                  record?.status === 'inactive' ? 'secondary' : 'destructive'
+                }>
+                  {record?.status || "Unknown"}
+                </Badge>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Vehicle Type</label>
+              <div className="text-sm">{record?.vehicleType || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Created At</label>
+              <div className="text-sm">
+                {record?.createdAt 
+                  ? new Date(record.createdAt).toLocaleString()
+                  : "N/A"
+                }
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Updated At</label>
+              <div className="text-sm">
+                {record?.updatedAt 
+                  ? new Date(record.updatedAt).toLocaleString()
+                  : "N/A"
+                }
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };

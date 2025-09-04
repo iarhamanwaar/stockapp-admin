@@ -3,17 +3,13 @@ import {
   IResourceComponentsProps,
   useShow,
 } from "@refinedev/core";
-import {
-  Show,
-  TextField,
-  DateField,
-  BooleanField,
-} from "@refinedev/antd";
-import { Typography, Tag } from "antd";
-
-const { Title } = Typography;
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export const BankShow: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
   const { queryResult } = useShow({
     resource: "banks",
   });
@@ -21,38 +17,71 @@ export const BankShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
-  return (
-    <Show isLoading={isLoading} canEdit canDelete resource="banks">
-      <Title level={5}>{"ID"}</Title>
-      <TextField value={record?.id ?? ""} />
-      <Title level={5}>{"Bank Name"}</Title>
-      <TextField value={record?.name} />
-      <Title level={5}>{"Bank Code"}</Title>
-      <TextField value={record?.code} />
-      <Title level={5}>{"Country"}</Title>
-      <TextField value={record?.country} />
-      <Title level={5}>{"Active"}</Title>
-      <BooleanField value={record?.isActive} />
-      <Title level={5}>{"Supported Services"}</Title>
-      <div>
-        {record?.supportedServices?.map((service: string, index: number) => (
-          <Tag key={index} color="blue" style={{ marginBottom: 4 }}>
-            {service}
-          </Tag>
-        )) || 'No services listed'}
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Loading bank...</div>
       </div>
-      <Title level={5}>{"Swift Code"}</Title>
-      <TextField value={record?.swiftCode || 'N/A'} />
-      <Title level={5}>{"Website"}</Title>
-      <TextField value={record?.website || 'N/A'} />
-      <Title level={5}>{"Contact Email"}</Title>
-      <TextField value={record?.contactEmail || 'N/A'} />
-      <Title level={5}>{"Phone"}</Title>
-      <TextField value={record?.phone || 'N/A'} />
-      <Title level={5}>{"Created at"}</Title>
-      <DateField value={record?.createdAt} />
-      <Title level={5}>{"Updated at"}</Title>
-      <DateField value={record?.updatedAt} />
-    </Show>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/banks")}
+          >
+            <ArrowLeftIcon className="h-4 w-4 mr-2" />
+            Back to Banks
+          </Button>
+          <h1 className="text-2xl font-bold">Bank Details</h1>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/banks/edit/${record?.id}`)}
+          >
+            <PencilIcon className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Bank #{record?.id}</CardTitle>
+          <CardDescription>View bank information</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">ID</label>
+              <div className="text-sm">{record?.id || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Name</label>
+              <div className="text-sm">{record?.name || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Code</label>
+              <div className="text-sm">{record?.code || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Created At</label>
+              <div className="text-sm">
+                {record?.createdAt 
+                  ? new Date(record.createdAt).toLocaleString()
+                  : "N/A"
+                }
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };

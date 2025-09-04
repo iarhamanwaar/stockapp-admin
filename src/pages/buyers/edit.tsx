@@ -1,91 +1,21 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Switch, Select, DatePicker } from "antd";
+import { GenericEdit } from "../../components/GenericEdit";
 
 export const BuyerEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm({
-    resource: "buyers",
-  });
-
-  const buyerData = queryResult?.data?.data;
-
   return (
-    <Edit saveButtonProps={saveButtonProps} canDelete resource="buyers">
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label={"First Name"}
-          name={["firstName"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Last Name"}
-          name={["lastName"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Email"}
-          name={["email"]}
-          rules={[
-            {
-              required: true,
-              type: "email",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Phone"}
-          name={["phone"]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Address"}
-          name={["address"]}
-        >
-          <Input.TextArea rows={3} />
-        </Form.Item>
-        <Form.Item
-          label={"Date of Birth"}
-          name={["dateOfBirth"]}
-        >
-          <DatePicker style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item
-          label={"Status"}
-          name={["status"]}
-          initialValue={"active"}
-        >
-          <Select
-            options={[
-              { value: "active", label: "Active" },
-              { value: "inactive", label: "Inactive" },
-              { value: "suspended", label: "Suspended" },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          label={"Verified"}
-          name={["isVerified"]}
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-      </Form>
-    </Edit>
+    <GenericEdit 
+      resource="buyers"
+      title="Buyer"
+      listPath="/buyers"
+      fields={[
+        { key: 'firstName', label: 'First Name', type: 'text' },
+        { key: 'lastName', label: 'Last Name', type: 'text' },
+        { key: 'email', label: 'Email', type: 'email' },
+        { key: 'phone', label: 'Phone', type: 'text' },
+        { key: 'address', label: 'Address', type: 'textarea' },
+        { key: 'status', label: 'Status', type: 'text' },
+      ]}
+    />
   );
 };

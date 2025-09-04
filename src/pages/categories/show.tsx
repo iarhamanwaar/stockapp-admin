@@ -1,40 +1,13 @@
 import React from "react";
-import {
-  IResourceComponentsProps,
-  useShow,
-} from "@refinedev/core";
-import {
-  Show,
-  TextField,
-  DateField,
-  BooleanField,
-} from "@refinedev/antd";
-import { Typography } from "antd";
-
-const { Title } = Typography;
+import { IResourceComponentsProps } from "@refinedev/core";
+import { GenericShow } from "../../components/GenericShow";
 
 export const CategoryShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow({
-    resource: "categories",
-  });
-  const { data, isLoading } = queryResult;
-
-  const record = data?.data;
-
   return (
-    <Show isLoading={isLoading} canEdit canDelete resource="categories">
-      <Title level={5}>{"ID"}</Title>
-      <TextField value={record?.id ?? ""} />
-      <Title level={5}>{"Name"}</Title>
-      <TextField value={record?.name} />
-      <Title level={5}>{"Description"}</Title>
-      <TextField value={record?.description} />
-      <Title level={5}>{"Active"}</Title>
-      <BooleanField value={record?.isActive} />
-      <Title level={5}>{"Created at"}</Title>
-      <DateField value={record?.createdAt} />
-      <Title level={5}>{"Updated at"}</Title>
-      <DateField value={record?.updatedAt} />
-    </Show>
+    <GenericShow 
+      resource="categories"
+      title="Category"
+      listPath="/categories"
+    />
   );
 };

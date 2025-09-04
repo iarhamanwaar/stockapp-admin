@@ -3,17 +3,14 @@ import {
   IResourceComponentsProps,
   useShow,
 } from "@refinedev/core";
-import {
-  Show,
-  TextField,
-  DateField,
-} from "@refinedev/antd";
-import { Typography, Tag, List, Avatar } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-
-const { Title, Paragraph } = Typography;
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 export const ChatShow: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
   const { queryResult } = useShow({
     resource: "chats",
   });
@@ -21,49 +18,84 @@ export const ChatShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Loading chat...</div>
+      </div>
+    );
+  }
+
   return (
-    <Show isLoading={isLoading} resource="chats">
-      <Title level={5}>{"ID"}</Title>
-      <TextField value={record?.id ?? ""} />
-      
-      <Title level={5}>{"Participants"}</Title>
-      <List
-        size="small"
-        dataSource={record?.participants || []}
-        renderItem={(participant: any) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={<Avatar icon={<UserOutlined />} />}
-              title={participant?.name || participant?.email || `User ${participant?.id}`}
-              description={participant?.role || 'User'}
-            />
-          </List.Item>
-        )}
-        locale={{ emptyText: 'No participants' }}
-      />
-      
-      <Title level={5}>{"Status"}</Title>
-      <Tag color={
-        record?.status === 'active' ? 'green' : 
-        record?.status === 'archived' ? 'gray' : 'orange'
-      }>
-        {record?.status?.toUpperCase() || 'UNKNOWN'}
-      </Tag>
-      
-      <Title level={5}>{"Last Message"}</Title>
-      <Paragraph>{record?.lastMessage || 'No messages yet'}</Paragraph>
-      
-      <Title level={5}>{"Message Count"}</Title>
-      <TextField value={record?.messageCount || 0} />
-      
-      <Title level={5}>{"Chat Type"}</Title>
-      <TextField value={record?.type || 'Direct'} />
-      
-      <Title level={5}>{"Created at"}</Title>
-      <DateField value={record?.createdAt} />
-      
-      <Title level={5}>{"Last Activity"}</Title>
-      <DateField value={record?.updatedAt} />
-    </Show>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate("/chats")}
+          >
+            <ArrowLeftIcon className="h-4 w-4 mr-2" />
+            Back to Chats
+          </Button>
+          <h1 className="text-2xl font-bold">Chat Details</h1>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Chat #{record?.id}</CardTitle>
+          <CardDescription>View chat conversation details</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">ID</label>
+              <div className="text-sm">{record?.id || "N/A"}</div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Status</label>
+              <div className="text-sm">
+                <Badge>{record?.status || "Active"}</Badge>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Created At</label>
+              <div className="text-sm">
+                {record?.createdAt 
+                  ? new Date(record.createdAt).toLocaleString()
+                  : "N/A"
+                }
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Updated At</label>
+              <div className="text-sm">
+                {record?.updatedAt 
+                  ? new Date(record.updatedAt).toLocaleString()
+                  : "N/A"
+                }
+              </div>
+            </div>
+          </div>
+          
+          {record?.participants && (
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Participants</label>
+              <div className="mt-2 space-y-2">
+                {record.participants.map((participant: any, index: number) => (
+                  <div key={index} className="flex items-center space-x-2 p-2 border rounded">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs">
+                      {participant.name?.[0] || "U"}
+                    </div>
+                    <span className="text-sm">{participant.name || participant.email || "Unknown User"}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };

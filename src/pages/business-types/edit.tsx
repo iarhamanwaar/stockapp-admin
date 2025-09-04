@@ -1,43 +1,17 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Switch } from "antd";
+import { GenericEdit } from "../../components/GenericEdit";
 
 export const BusinessTypeEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm({
-    resource: "businesstypes",
-  });
-
-  const businessTypeData = queryResult?.data?.data;
-
   return (
-    <Edit saveButtonProps={saveButtonProps} canDelete resource="businesstypes">
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label={"Name"}
-          name={["name"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Description"}
-          name={["description"]}
-        >
-          <Input.TextArea rows={4} />
-        </Form.Item>
-        <Form.Item
-          label={"Active"}
-          name={["isActive"]}
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-      </Form>
-    </Edit>
+    <GenericEdit 
+      resource="businesstypes"
+      title="Business Type"
+      listPath="/business-types"
+      fields={[
+        { key: 'name', label: 'Name', type: 'text' },
+        { key: 'description', label: 'Description', type: 'textarea' },
+      ]}
+    />
   );
 };

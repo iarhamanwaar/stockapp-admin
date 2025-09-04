@@ -1,21 +1,18 @@
 import React from "react";
 import { useCustom } from "@refinedev/core";
-import { Card, Col, Row, Statistic, Typography, List, Avatar } from "antd";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LoadingCard, LoadingSpinner } from "@/components/ui/loading";
 import {
-  UserOutlined,
-  ShoppingCartOutlined,
-  ProductOutlined,
-  FileImageOutlined,
-  TagOutlined,
-  ShopOutlined,
-  TruckOutlined,
-  StarOutlined,
-  DollarOutlined,
-  BankOutlined,
-} from "@ant-design/icons";
-import { PageLoading } from "../../components";
-
-const { Title } = Typography;
+  UserIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
+  PhotoIcon,
+  TagIcon,
+  BuildingStorefrontIcon,
+  TruckIcon,
+  StarIcon,
+  CurrencyDollarIcon,
+} from "@heroicons/react/24/outline";
 
 interface DashboardStats {
   totalUsers: number;
@@ -57,13 +54,64 @@ export const Dashboard: React.FC = () => {
     method: "get",
   });
 
-  if (isLoading) return <PageLoading tip="Loading dashboard data..." />;
-  if (error) return (
-    <div style={{ padding: '24px', textAlign: 'center', color: '#FF6060' }}>
-      <h3>Error loading dashboard</h3>
-      <p>Unable to load dashboard statistics. Please try again.</p>
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome to your StockApp admin panel</p>
+        </div>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <Card key={index}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <LoadingCard lines={1} />
+              </CardHeader>
+              <CardContent>
+                <LoadingCard lines={2} />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Users</CardTitle>
+              <CardDescription>Loading recent activity...</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <LoadingCard lines={5} />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Orders</CardTitle>
+              <CardDescription>Loading recent activity...</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <LoadingCard lines={5} />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Error loading dashboard</CardTitle>
+            <CardDescription>Unable to load dashboard statistics. Please try again.</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    );
+  }
 
   const stats = data?.data?.stats;
   const recentActivity = data?.data?.recentActivity;
@@ -72,127 +120,143 @@ export const Dashboard: React.FC = () => {
     {
       title: "Total Users",
       value: stats?.totalUsers || 0,
-      icon: <UserOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
-      color: "#3B1040",
+      icon: UserIcon,
+      description: "Active users in the system",
     },
     {
       title: "Total Products",
       value: stats?.totalProducts || 0,
-      icon: <ProductOutlined style={{ fontSize: 24, color: "#50287D" }} />,
-      color: "#50287D",
+      icon: ShoppingBagIcon,
+      description: "Products in catalog",
     },
     {
       title: "Total Orders",
       value: stats?.totalOrders || 0,
-      icon: <ShoppingCartOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
-      color: "#6A0DAD",
+      icon: ShoppingCartIcon,
+      description: "Orders processed",
     },
     {
       title: "Total Images",
       value: stats?.totalImages || 0,
-      icon: <FileImageOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
-      color: "#3B1040",
+      icon: PhotoIcon,
+      description: "Product images uploaded",
     },
     {
       title: "Categories",
       value: stats?.totalCategories || 0,
-      icon: <TagOutlined style={{ fontSize: 24, color: "#50287D" }} />,
-      color: "#50287D",
+      icon: TagIcon,
+      description: "Product categories",
     },
     {
       title: "Sellers",
       value: stats?.totalSellers || 0,
-      icon: <ShopOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
-      color: "#6A0DAD",
+      icon: BuildingStorefrontIcon,
+      description: "Active sellers",
     },
     {
       title: "Buyers",
       value: stats?.totalBuyers || 0,
-      icon: <UserOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
-      color: "#3B1040",
+      icon: UserIcon,
+      description: "Registered buyers",
     },
     {
       title: "Riders",
       value: stats?.totalRiders || 0,
-      icon: <TruckOutlined style={{ fontSize: 24, color: "#50287D" }} />,
-      color: "#50287D",
+      icon: TruckIcon,
+      description: "Delivery riders",
     },
     {
       title: "Reviews",
       value: stats?.totalReviews || 0,
-      icon: <StarOutlined style={{ fontSize: 24, color: "#6A0DAD" }} />,
-      color: "#6A0DAD",
+      icon: StarIcon,
+      description: "Customer reviews",
     },
     {
       title: "Transactions",
       value: stats?.totalTransactions || 0,
-      icon: <DollarOutlined style={{ fontSize: 24, color: "#3B1040" }} />,
-      color: "#3B1040",
+      icon: CurrencyDollarIcon,
+      description: "Financial transactions",
     },
   ];
 
   return (
-    <div style={{ padding: 0 }}>
-      <Title level={2} className="h2-semibold" style={{ marginBottom: 24, color: '#1A1A1A' }}>Dashboard</Title>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Welcome to your StockApp admin panel</p>
+      </div>
       
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        {statCards.map((stat, index) => (
-          <Col xs={24} sm={12} md={8} lg={6} xl={4} key={index}>
-            <Card>
-              <Statistic
-                title={stat.title}
-                value={stat.value}
-                prefix={stat.icon}
-                valueStyle={{ color: stat.color }}
-              />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {statCards.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <Card key={index}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stat.value.toLocaleString()}</div>
+                <p className="text-xs text-muted-foreground">{stat.description}</p>
+              </CardContent>
             </Card>
-          </Col>
-        ))}
-      </Row>
+          );
+        })}
+      </div>
 
-      <Row gutter={[16, 16]}>
-        <Col xs={24} lg={12}>
-          <Card title="Recent Users" bordered={false}>
-            <List
-              itemLayout="horizontal"
-              dataSource={recentActivity?.recentUsers || []}
-              renderItem={(user: RecentUser) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<Avatar icon={<UserOutlined />} />}
-                    title={user.email}
-                    description={new Date(user.createdAt).toLocaleDateString()}
-                  />
-                </List.Item>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Users</CardTitle>
+            <CardDescription>Newly registered users</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity?.recentUsers?.map((user: RecentUser) => (
+                <div key={user.id} className="flex items-center space-x-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <UserIcon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.email}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              )) || (
+                <p className="text-sm text-muted-foreground">No recent users</p>
               )}
-            />
-          </Card>
-        </Col>
+            </div>
+          </CardContent>
+        </Card>
         
-        <Col xs={24} lg={12}>
-          <Card title="Recent Orders" bordered={false}>
-            <List
-              itemLayout="horizontal"
-              dataSource={recentActivity?.recentOrders || []}
-              renderItem={(order: RecentOrder) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<Avatar icon={<ShoppingCartOutlined />} />}
-                    title={`Order #${order.id}`}
-                    description={
-                      <div>
-                        <div>Status: {order.status}</div>
-                        <div>Total: ${order.total}</div>
-                        <div>{new Date(order.createdAt).toLocaleDateString()}</div>
-                      </div>
-                    }
-                  />
-                </List.Item>
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Orders</CardTitle>
+            <CardDescription>Latest order activity</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity?.recentOrders?.map((order: RecentOrder) => (
+                <div key={order.id} className="flex items-center space-x-4">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <ShoppingCartIcon className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">Order #{order.id}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {order.status} • ${order.total} • {new Date(order.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              )) || (
+                <p className="text-sm text-muted-foreground">No recent orders</p>
               )}
-            />
-          </Card>
-        </Col>
-      </Row>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

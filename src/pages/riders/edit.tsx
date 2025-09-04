@@ -1,102 +1,21 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Select, Switch } from "antd";
+import { GenericEdit } from "../../components/GenericEdit";
 
 export const RiderEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm({
-    resource: "riders",
-  });
-
-  const riderData = queryResult?.data?.data;
-
   return (
-    <Edit saveButtonProps={saveButtonProps} canDelete resource="riders">
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label={"First Name"}
-          name={["firstName"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Last Name"}
-          name={["lastName"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Email"}
-          name={["email"]}
-          rules={[
-            {
-              required: true,
-              type: "email",
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Phone"}
-          name={["phone"]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label={"Vehicle Type"}
-          name={["vehicleType"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            options={[
-              { value: "motorcycle", label: "Motorcycle" },
-              { value: "bicycle", label: "Bicycle" },
-              { value: "car", label: "Car" },
-              { value: "van", label: "Van" },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          label={"Available"}
-          name={["isAvailable"]}
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-        <Form.Item
-          label={"Status"}
-          name={["status"]}
-          initialValue={"active"}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            options={[
-              { value: "active", label: "Active" },
-              { value: "inactive", label: "Inactive" },
-              { value: "suspended", label: "Suspended" },
-            ]}
-          />
-        </Form.Item>
-      </Form>
-    </Edit>
+    <GenericEdit 
+      resource="riders"
+      title="Rider"
+      listPath="/riders"
+      fields={[
+        { key: 'firstName', label: 'First Name', type: 'text' },
+        { key: 'lastName', label: 'Last Name', type: 'text' },
+        { key: 'email', label: 'Email', type: 'email' },
+        { key: 'phone', label: 'Phone', type: 'text' },
+        { key: 'vehicleType', label: 'Vehicle Type', type: 'text' },
+        { key: 'status', label: 'Status', type: 'text' },
+      ]}
+    />
   );
 };

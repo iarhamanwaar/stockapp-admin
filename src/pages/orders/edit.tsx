@@ -1,36 +1,16 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Select } from "antd";
+import { GenericEdit } from "../../components/GenericEdit";
 
 export const OrderEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps } = useForm({
-    resource: "order",
-  });
-
   return (
-    <Edit saveButtonProps={saveButtonProps} canDelete resource="order">
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label={"Status"}
-          name={["status"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            options={[
-              { value: "pending", label: "Pending" },
-              { value: "processing", label: "Processing" },
-              { value: "shipped", label: "Shipped" },
-              { value: "delivered", label: "Delivered" },
-              { value: "cancelled", label: "Cancelled" },
-            ]}
-          />
-        </Form.Item>
-      </Form>
-    </Edit>
+    <GenericEdit 
+      resource="order"
+      title="Order"
+      listPath="/orders"
+      fields={[
+        { key: 'status', label: 'Status', type: 'text' },
+      ]}
+    />
   );
 };

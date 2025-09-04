@@ -1,56 +1,18 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Switch, Rate } from "antd";
-
-const { TextArea } = Input;
+import { GenericEdit } from "../../components/GenericEdit";
 
 export const ProductReviewEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm({
-    resource: "productreviews",
-  });
-
-  const reviewData = queryResult?.data?.data;
-
   return (
-    <Edit saveButtonProps={saveButtonProps} canDelete resource="productreviews">
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label={"Rating"}
-          name={["rating"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Rate />
-        </Form.Item>
-        <Form.Item
-          label={"Comment"}
-          name={["comment"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <TextArea rows={4} />
-        </Form.Item>
-        <Form.Item
-          label={"Approved"}
-          name={["isApproved"]}
-          valuePropName="checked"
-        >
-          <Switch />
-        </Form.Item>
-        <Form.Item
-          label={"Moderator Notes"}
-          name={["moderatorNotes"]}
-        >
-          <TextArea rows={3} placeholder="Add moderator notes..." />
-        </Form.Item>
-      </Form>
-    </Edit>
+    <GenericEdit 
+      resource="productreviews"
+      title="Product Review"
+      listPath="/product-reviews"
+      fields={[
+        { key: 'rating', label: 'Rating', type: 'number' },
+        { key: 'comment', label: 'Comment', type: 'textarea' },
+        { key: 'moderatorNotes', label: 'Moderator Notes', type: 'textarea' },
+      ]}
+    />
   );
 };
