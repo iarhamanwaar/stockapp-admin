@@ -17,10 +17,12 @@ export const authProvider: AuthProvider = {
 
       localStorage.setItem("token", mockToken);
       localStorage.setItem("user", JSON.stringify(mockUser));
-      
+
+      // Force page reload to trigger authentication check
+      window.location.href = "/";
+
       return {
         success: true,
-        redirectTo: "/",
       };
     } else {
       return {

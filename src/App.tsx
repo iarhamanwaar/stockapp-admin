@@ -25,6 +25,7 @@ import { NotificationList, NotificationShow, NotificationEdit } from "./pages/no
 import { ChatList, ChatShow } from "./pages/chats";
 import { MessageList, MessageShow } from "./pages/messages";
 import { BankList, BankShow, BankEdit } from "./pages/banks";
+import { PricingList, PricingShow, PricingEdit } from "./pages/pricing";
 import { Dashboard } from "./pages/dashboard";
 
 function App() {
@@ -227,6 +228,17 @@ function App() {
                 label: "Banks",
               },
             },
+            {
+              name: "pricing",
+              list: "/pricing",
+              create: "/pricing/create",
+              edit: "/pricing/edit/:id",
+              show: "/pricing/show/:id",
+              meta: {
+                canDelete: true,
+                label: "Pricing Config",
+              },
+            },
           ]}
           options={{
             syncWithLocation: true,
@@ -318,6 +330,10 @@ function App() {
               <Route path="/banks" element={<BankList />} />
               <Route path="/banks/show/:id" element={<BankShow />} />
               <Route path="/banks/edit/:id" element={<BankEdit />} />
+
+              <Route path="/pricing" element={<PricingList />} />
+              <Route path="/pricing/show/:id" element={<PricingShow />} />
+              <Route path="/pricing/edit/:id" element={<PricingEdit />} />
 
               <Route path="*" element={<ErrorComponent />} />
             </Route>

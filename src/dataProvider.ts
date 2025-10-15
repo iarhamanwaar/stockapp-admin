@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
 const getApiEndpoint = (resource: string, id?: string | number) => {
   const endpointMap: Record<string, string> = {
     "user": "users",
-    "products": "products", 
+    "products": "products",
     "order": "orders",
     "productimage": "product-images",
     "categories": "categories",
@@ -51,9 +51,10 @@ const getApiEndpoint = (resource: string, id?: string | number) => {
     "notifications": "notifications",
     "chats": "chats",
     "messages": "messages",
-    "banks": "banks"
+    "banks": "banks",
+    "pricing": "pricing"
   };
-  
+
   const endpoint = endpointMap[resource] || resource;
   return id ? `${API_BASE_PATH}/${endpoint}/${id}` : `${API_BASE_PATH}/${endpoint}`;
 };
