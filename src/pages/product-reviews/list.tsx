@@ -4,12 +4,13 @@ import { GenericList } from "../../components/GenericList";
 
 export const ProductReviewList: React.FC<IResourceComponentsProps> = () => {
   return (
-    <GenericList 
+    <GenericList
       resource="productreviews"
       title="Product Reviews"
       description="Moderate product reviews"
       basePath="/product-reviews"
       columns={['id', 'rating', 'comment', 'status', 'productId', 'buyerId', 'createdAt']}
+      searchPlaceholder="Search by review comment..."
     />
   );
 };

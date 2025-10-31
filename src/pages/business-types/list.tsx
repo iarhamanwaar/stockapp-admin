@@ -4,12 +4,13 @@ import { GenericList } from "../../components/GenericList";
 
 export const BusinessTypeList: React.FC<IResourceComponentsProps> = () => {
   return (
-    <GenericList 
+    <GenericList
       resource="businesstypes"
       title="Business Types"
       description="Manage business types"
       basePath="/business-types"
       columns={['id', 'name', 'description', 'isActive', 'createdAt']}
+      searchPlaceholder="Search by business type name (English or Spanish)..."
     />
   );
 };

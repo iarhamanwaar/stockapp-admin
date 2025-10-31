@@ -8,6 +8,7 @@ export const BuyerShow: React.FC<IResourceComponentsProps> = () => {
       resource="buyers"
       title="Buyer"
       listPath="/buyers"
+      
     />
   );
 };

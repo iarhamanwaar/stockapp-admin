@@ -4,12 +4,13 @@ import { GenericList } from "../../components/GenericList";
 
 export const ProductImageList: React.FC<IResourceComponentsProps> = () => {
   return (
-    <GenericList 
+    <GenericList
       resource="productimage"
       title="Product Images"
       description="Manage product images"
       basePath="/product-images"
       columns={['id', 'imageUrl', 'createdAt']}
+      searchPlaceholder="Search by image URL..."
     />
   );
 };

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IResourceComponentsProps,
   BaseRecord,
+  CrudFilters,
 } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef, flexRender } from "@tanstack/react-table";
@@ -16,9 +17,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { EyeIcon, PencilIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, PencilIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { LoadingTable } from "@/components/ui/loading";
+import { GenericDelete } from "./GenericDelete";
+import { ApprovalStatusBadge } from "./ApprovalStatusBadge";
+import { ApprovalStatus } from "@/types/approval";
+import { SearchInput } from "@/components/SearchInput";
 
 interface GenericListProps extends IResourceComponentsProps {
   resource: string;
@@ -26,16 +31,23 @@ interface GenericListProps extends IResourceComponentsProps {
   description: string;
   basePath: string;
   columns: string[];
+  canDelete?: boolean; // Add option to enable/disable delete
+  searchPlaceholder?: string; // Custom placeholder for search input
+  enableSearch?: boolean; // Enable/disable search functionality
 }
 
-export const GenericList: React.FC<GenericListProps> = ({ 
-  resource, 
-  title, 
+export const GenericList: React.FC<GenericListProps> = ({
+  resource,
+  title,
   description,
   basePath,
-  columns: fieldColumns
+  columns: fieldColumns,
+  canDelete = true, // Default to true
+  searchPlaceholder = "Search...",
+  enableSearch = true, // Default to true
 }) => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   const columns = React.useMemo<ColumnDef<BaseRecord>[]>(
     () => [
@@ -45,20 +57,43 @@ export const GenericList: React.FC<GenericListProps> = ({
         header: field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1'),
         cell: ({ getValue, row }: any) => {
           const value = getValue();
-          
+
+          // Handle approval status - show as Approved/Not Approved text with badge
+          if (field === 'approvalStatus') {
+            // Use approvalStatus if available, otherwise fallback to isVerified
+            let isApproved = false;
+            if (value) {
+              isApproved = value === 'approved';
+            } else if (row.original.isVerified !== undefined) {
+              // Fallback to isVerified if no approvalStatus
+              isApproved = row.original.isVerified === true;
+            }
+
+            return (
+              <Badge variant={isApproved ? 'default' : 'destructive'} className="whitespace-nowrap">
+                {isApproved ? "Approved" : "Not Approved"}
+              </Badge>
+            );
+          }
+
+          // Handle isVerified field - always show N/A
+          if (field === 'isVerified') {
+            return <span className="text-muted-foreground">N/A</span>;
+          }
+
           // Handle different data types
           if (typeof value === 'boolean') {
             return <Badge variant={value ? 'default' : 'destructive'}>{value ? "Yes" : "No"}</Badge>;
           }
-          
+
           if (field.includes('status')) {
             return <Badge variant="secondary">{value || 'Unknown'}</Badge>;
           }
-          
+
           if (field.includes('date') || field.includes('At')) {
             return value ? new Date(value).toLocaleDateString() : 'N/A';
           }
-          
+
           return value || 'N/A';
         },
       })),
@@ -71,6 +106,7 @@ export const GenericList: React.FC<GenericListProps> = ({
               variant="outline"
               size="sm"
               onClick={() => navigate(`${basePath}/show/${row.original.id}`)}
+              title="View details"
             >
               <EyeIcon className="h-4 w-4" />
             </Button>
@@ -78,15 +114,47 @@ export const GenericList: React.FC<GenericListProps> = ({
               variant="outline" 
               size="sm"
               onClick={() => navigate(`${basePath}/edit/${row.original.id}`)}
+              title="Edit"
             >
               <PencilIcon className="h-4 w-4" />
             </Button>
+            {canDelete && (
+              <GenericDelete
+                id={String(row.original.id)}
+                resource={resource}
+                title={title.slice(0, -1)} // Remove 's' from plural
+                redirectTo={basePath}
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    title="Delete"
+                  >
+                    <TrashIcon className="h-4 w-4" />
+                  </Button>
+                }
+              />
+            )}
           </div>
         ),
       },
     ],
-    [navigate, basePath, fieldColumns]
+    [navigate, basePath, fieldColumns, canDelete, resource, title]
   );
+
+  // Build filters array
+  const filters: CrudFilters = React.useMemo(() => {
+    const filterArray: CrudFilters = [];
+    if (searchTerm) {
+      filterArray.push({
+        field: 'search',
+        operator: 'contains',
+        value: searchTerm,
+      });
+    }
+    return filterArray;
+  }, [searchTerm]);
 
   const {
     getHeaderGroups,
@@ -107,15 +175,47 @@ export const GenericList: React.FC<GenericListProps> = ({
         current: 1,
         pageSize: 10,
       },
+      filters: {
+        permanent: filters,
+      },
     },
   });
+
+  // Reset to page 1 when search changes
+  React.useEffect(() => {
+    setCurrent(1);
+  }, [searchTerm, setCurrent]);
+
+  const totalResults = tableData?.total || 0;
 
   return (
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
+          <div className="flex flex-col gap-4">
+            <div>
+              <CardTitle>{title}</CardTitle>
+              <CardDescription>{description}</CardDescription>
+            </div>
+            {enableSearch && (
+              <SearchInput
+                onSearch={setSearchTerm}
+                placeholder={searchPlaceholder}
+                className="max-w-md"
+              />
+            )}
+            {searchTerm && (
+              <div className="text-sm text-muted-foreground">
+                Showing results for: <strong>"{searchTerm}"</strong> ({totalResults} {totalResults === 1 ? 'result' : 'results'} found)
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="ml-2 text-primary hover:underline"
+                >
+                  Clear search
+                </button>
+              </div>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -162,7 +262,16 @@ export const GenericList: React.FC<GenericListProps> = ({
                         colSpan={columns.length}
                         className="h-24 text-center"
                       >
-                        No {title.toLowerCase()} found.
+                        {searchTerm ? (
+                          <div className="flex flex-col items-center gap-2">
+                            <p>No results found for "{searchTerm}"</p>
+                            <p className="text-sm text-muted-foreground">
+                              Try checking your spelling or using different keywords
+                            </p>
+                          </div>
+                        ) : (
+                          <p>No {title.toLowerCase()} found.</p>
+                        )}
                       </TableCell>
                     </TableRow>
                   )}

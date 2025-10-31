@@ -17,6 +17,7 @@ export const PricingList: React.FC<IResourceComponentsProps> = () => {
         'isActive',
         'createdAt'
       ]}
+      enableSearch={false}
     />
   );
 };

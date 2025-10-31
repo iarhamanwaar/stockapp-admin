@@ -6,20 +6,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeftIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingCard } from "@/components/ui/loading";
+import { GenericDelete } from "./GenericDelete";
 
 interface GenericShowProps extends IResourceComponentsProps {
   resource: string;
   title: string;
   listPath: string;
+  canDelete?: boolean; // Add option to enable/disable delete
 }
 
 export const GenericShow: React.FC<GenericShowProps> = ({ 
   resource, 
   title, 
-  listPath 
+  listPath,
+  canDelete = true, // Default to true
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -138,6 +141,24 @@ export const GenericShow: React.FC<GenericShowProps> = ({
             <PencilIcon className="h-4 w-4 mr-2" />
             Edit
           </Button>
+          {canDelete && record?.id && (
+            <GenericDelete
+              id={String(record.id)}
+              resource={resource}
+              title={title}
+              redirectTo={listPath}
+              trigger={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <TrashIcon className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              }
+            />
+          )}
         </div>
       </div>
 

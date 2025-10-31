@@ -75,10 +75,19 @@ export const AppSidebar: React.FC = () => {
             <SidebarMenu>
               {menuItems.map((item) => {
                 const Icon = iconMap[item.key] || iconMap[item.name] || Squares2X2Icon;
-                const isActive = item.route === "/" 
-                  ? location.pathname === "/"
-                  : location.pathname.startsWith(item.route || "");
-                
+                // Exact matching - only highlight if exact route or detail/edit pages (not sub-resources)
+                let isActive = false;
+                if (item.route === "/") {
+                  isActive = location.pathname === "/";
+                } else if (item.route) {
+                  // Exact match or detail/edit pages, but NOT other routes like /sellers/pending
+                  isActive = location.pathname === item.route ||
+                    (location.pathname.startsWith(item.route + "/") &&
+                     (location.pathname.includes("/show/") ||
+                      location.pathname.includes("/edit/") ||
+                      location.pathname.includes("/create")));
+                }
+
                 return (
                   <SidebarMenuItem key={item.key}>
                     <SidebarMenuButton 

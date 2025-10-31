@@ -79,6 +79,9 @@ export const dataProvider: DataProvider = {
         if ('field' in filter && filter.field === 'status' && filter.value) {
           params.append('status', filter.value);
         }
+        if ('field' in filter && filter.field === 'approvalStatus' && filter.value) {
+          params.append('approvalStatus', filter.value);
+        }
       });
     }
 
@@ -87,13 +90,71 @@ export const dataProvider: DataProvider = {
 
     try {
       const { data } = await axiosInstance.get(fullUrl);
-      
+
+      // For sellers and riders, ensure approvalStatus exists (fallback to isVerified)
+      let processedData = data.data || [];
+      if ((resource === 'sellers' || resource === 'riders') && processedData.length > 0) {
+        processedData = processedData.map((item: any) => {
+          // If no approvalStatus, infer from isVerified
+          if (!item.approvalStatus) {
+            item.approvalStatus = item.isVerified ? 'approved' : 'pending';
+          }
+          return item;
+        });
+      }
+
       return {
-        data: data.data || [],
+        data: processedData,
         total: data.total || 0,
       };
     } catch (error) {
       console.error(`Error fetching ${resource}:`, error);
+
+      // For demo purposes, return mock list data for sellers and riders
+      if (resource === 'sellers' || resource === 'riders') {
+        const mockItems = [];
+        const statuses: ('pending' | 'approved' | 'rejected')[] = ['pending', 'approved', 'rejected'];
+
+        for (let i = 1; i <= 5; i++) {
+          const approvalStatus = statuses[i % 3];
+
+          if (resource === 'sellers') {
+            mockItems.push({
+              id: `seller-${i}`,
+              name: `Seller ${i}`,
+              email: `seller${i}@example.com`,
+              businessName: `Business ${i}`,
+              businessType: 'Retail',
+              phone: `+123456789${i}`,
+              status: approvalStatus === 'approved' ? 'active' : 'inactive',
+              isVerified: approvalStatus === 'approved',
+              approvalStatus: approvalStatus,
+              createdAt: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+            });
+          } else if (resource === 'riders') {
+            mockItems.push({
+              id: `rider-${i}`,
+              firstName: `Rider`,
+              lastName: `${i}`,
+              name: `Rider ${i}`,
+              email: `rider${i}@example.com`,
+              phone: `+123456789${i}`,
+              vehicleType: i % 2 === 0 ? 'Motorcycle' : 'Car',
+              isAvailable: true,
+              status: approvalStatus === 'approved' ? 'active' : 'inactive',
+              isVerified: approvalStatus === 'approved',
+              approvalStatus: approvalStatus,
+              createdAt: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
+            });
+          }
+        }
+
+        return {
+          data: mockItems,
+          total: mockItems.length,
+        };
+      }
+
       return {
         data: [],
         total: 0,
@@ -106,13 +167,23 @@ export const dataProvider: DataProvider = {
 
     try {
       const { data } = await axiosInstance.get(apiEndpoint);
+
+      // For sellers and riders, ensure approvalStatus exists (fallback to isVerified)
+      if ((resource === 'sellers' || resource === 'riders') && data) {
+        if (!data.approvalStatus) {
+          data.approvalStatus = data.isVerified ? 'approved' : 'pending';
+        }
+      }
+
       return {
         data,
       };
     } catch (error) {
       // For demo purposes, return mock data when API is not available
       console.warn(`API not available for ${resource}/${id}, returning mock data`);
-      const mockData = {
+
+      // Enhanced mock data for sellers and riders with approval fields
+      let mockData: any = {
         id: id,
         name: `Sample ${resource}`,
         email: "sample@example.com",
@@ -123,7 +194,82 @@ export const dataProvider: DataProvider = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      
+
+      // Add approval-specific mock data for sellers
+      if (resource === 'sellers') {
+        mockData = {
+          ...mockData,
+          businessName: "Sample Business LLC",
+          businessType: "Retail",
+          address: "123 Business Street, City, State 12345",
+          contactPerson: "John Doe",
+          phone: "+1234567890",
+          approvalStatus: "pending",
+          documents: {
+            businessLicense: {
+              url: "https://via.placeholder.com/800x600/4CAF50/FFFFFF?text=Business+License",
+              fileName: "business_license.pdf",
+              uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            },
+            idCard: {
+              url: "https://via.placeholder.com/800x600/2196F3/FFFFFF?text=ID+Card",
+              fileName: "id_card.jpg",
+              uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            },
+            taxDocument: {
+              url: "https://via.placeholder.com/800x600/FF9800/FFFFFF?text=Tax+Document",
+              fileName: "tax_registration.pdf",
+              uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            }
+          },
+          submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        };
+      }
+
+      // Add approval-specific mock data for riders
+      if (resource === 'riders') {
+        mockData = {
+          ...mockData,
+          firstName: "Jane",
+          lastName: "Smith",
+          name: "Jane Smith",
+          phone: "+1234567890",
+          vehicleType: "Motorcycle",
+          isAvailable: true,
+          approvalStatus: "pending",
+          documents: {
+            idCard: {
+              url: "https://via.placeholder.com/800x600/2196F3/FFFFFF?text=ID+Card",
+              fileName: "rider_id.jpg",
+              uploadedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            },
+            drivingLicense: {
+              url: "https://via.placeholder.com/800x600/4CAF50/FFFFFF?text=Driving+License",
+              fileName: "driving_license.jpg",
+              uploadedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            },
+            vehicleRegistration: {
+              url: "https://via.placeholder.com/800x600/FF5722/FFFFFF?text=Vehicle+Registration",
+              fileName: "vehicle_reg.pdf",
+              uploadedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            },
+            profilePhoto: {
+              url: "https://via.placeholder.com/400x400/9C27B0/FFFFFF?text=Profile+Photo",
+              fileName: "profile.jpg",
+              uploadedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              status: "pending"
+            }
+          },
+          submittedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        };
+      }
+
       return {
         data: mockData,
       };
@@ -190,15 +336,31 @@ export const dataProvider: DataProvider = {
       const { data } = await axiosInstance.get(`${API_BASE_PATH}/dashboard/stats`);
       return { data };
     }
-    
-    const { data } = await axiosInstance.request({
-      url: url.startsWith('/') ? url : `${API_BASE_PATH}/${url}`,
-      method: method || 'GET',
-      data: payload,
-      params: query,
-      headers,
-    });
-    
-    return { data };
+
+    // Handle approval/rejection endpoints
+    try {
+      const { data } = await axiosInstance.request({
+        url: url.startsWith('/') ? url : `${API_BASE_PATH}/${url}`,
+        method: method || 'GET',
+        data: payload,
+        params: query,
+        headers,
+      });
+
+      return { data };
+    } catch (error) {
+      // For demo purposes, return mock success for approval actions when API is not available
+      if (url.includes('/approve') || url.includes('/reject') || url.includes('/request-info')) {
+        console.warn(`API not available for ${url}, returning mock success`);
+        return {
+          data: {
+            success: true,
+            message: 'Action completed successfully (mock)',
+            timestamp: new Date().toISOString(),
+          },
+        };
+      }
+      throw error;
+    }
   },
 };

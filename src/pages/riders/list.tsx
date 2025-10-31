@@ -4,12 +4,13 @@ import { GenericList } from "../../components/GenericList";
 
 export const RiderList: React.FC<IResourceComponentsProps> = () => {
   return (
-    <GenericList 
+    <GenericList
       resource="riders"
       title="Riders"
       description="Manage delivery riders"
       basePath="/riders"
-      columns={['id', 'firstName', 'lastName', 'email', 'phone', 'vehicleType', 'isAvailable', 'status', 'createdAt']}
+      columns={['id', 'firstName', 'lastName', 'email', 'phone', 'vehicleType', 'approvalStatus', 'isAvailable', 'status', 'createdAt']}
+      searchPlaceholder="Search by name, phone, city, country, license name, or CNIC..."
     />
   );
 };
