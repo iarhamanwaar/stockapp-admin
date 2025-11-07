@@ -253,7 +253,7 @@ function App() {
               edit: "/pricing/edit/:id",
               show: "/pricing/show/:id",
               meta: {
-                canDelete: true,
+                canDelete: false,
                 label: "Pricing Config",
               },
             },
