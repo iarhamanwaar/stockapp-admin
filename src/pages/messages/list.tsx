@@ -12,6 +12,7 @@ export const MessageList: React.FC<IResourceComponentsProps> = () => {
       columns={['id', 'content', 'senderId', 'chatId', 'messageType', 'isRead', 'timestamp']}
       searchPlaceholder="Search by message content..."
       canDelete={false}
+      canCreate={false}
     />
   );
 };

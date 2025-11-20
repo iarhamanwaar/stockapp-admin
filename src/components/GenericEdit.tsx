@@ -83,7 +83,10 @@ export const GenericEdit: React.FC<GenericEditProps> = ({
       createRecord(
         {
           resource,
-          values: formData,
+          values: {
+            ...formData,
+            isActive: true, // Set new records as active by default
+          },
         },
         {
           onSuccess: () => {
@@ -182,7 +185,7 @@ export const GenericEdit: React.FC<GenericEditProps> = ({
             Back to {title}s
           </Button>
           <h1 className="text-2xl font-bold">{id ? "Edit" : "Create"} {title}</h1>
-        </div>
+        </div> 
       </div>
 
       <Card>

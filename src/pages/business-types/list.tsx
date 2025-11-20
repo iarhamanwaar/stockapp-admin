@@ -7,9 +7,9 @@ export const BusinessTypeList: React.FC<IResourceComponentsProps> = () => {
     <GenericList
       resource="businesstypes"
       title="Business Types"
-      description="Manage business types"
+      description="Manage business types with bilingual support (English/Spanish)"
       basePath="/business-types"
-      columns={['id', 'name', 'description', 'isActive', 'createdAt']}
+      columns={['id', 'name', 'nameEs', 'description', 'isActive', 'createdAt']}
       searchPlaceholder="Search by business type name (English or Spanish)..."
     />
   );

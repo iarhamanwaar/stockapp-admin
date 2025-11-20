@@ -7,9 +7,9 @@ export const CategoryList: React.FC<IResourceComponentsProps> = () => {
     <GenericList
       resource="categories"
       title="Categories"
-      description="Manage categories"
+      description="Manage categories with bilingual support (English/Spanish)"
       basePath="/categories"
-      columns={['id', 'name', 'description', 'isActive', 'createdAt']}
+      columns={['id', 'name', 'nameEs', 'description', 'isActive', 'createdAt']}
       searchPlaceholder="Search by category name (English or Spanish)..."
     />
   );

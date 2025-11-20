@@ -11,6 +11,7 @@ export const UserList: React.FC<IResourceComponentsProps> = () => {
       basePath="/users"
       columns={['id', 'email', 'role', 'phoneNumber', 'isVerified', 'createdAt']}
       searchPlaceholder="Search by email or phone..."
+      canCreate={false}
     />
   );
 };

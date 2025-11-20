@@ -11,6 +11,8 @@ export const OrderList: React.FC<IResourceComponentsProps> = () => {
       basePath="/orders"
       columns={['id', 'status', 'totalAmount', 'createdAt']}
       searchPlaceholder="Search by buyer name, phone, address, or city..."
+      canCreate={false}
+      canDelete={false}
     />
   );
 };

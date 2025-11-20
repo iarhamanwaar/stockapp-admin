@@ -12,9 +12,9 @@ import { ProductList, ProductShow, ProductEdit } from "./pages/products";
 import { UserList, UserShow, UserEdit } from "./pages/users";
 import { OrderList, OrderShow, OrderEdit } from "./pages/orders";
 import { ProductImageList, ProductImageShow, ProductImageEdit } from "./pages/product-images";
-import { CategoryList, CategoryShow, CategoryEdit } from "./pages/categories";
-import { BusinessTypeList, BusinessTypeShow, BusinessTypeEdit } from "./pages/business-types";
-import { MaterialList, MaterialShow, MaterialEdit } from "./pages/materials";
+import { CategoryList, CategoryShow, CategoryEdit, CategoryCreate } from "./pages/categories";
+import { BusinessTypeList, BusinessTypeShow, BusinessTypeEdit, BusinessTypeCreate } from "./pages/business-types";
+import { MaterialList, MaterialShow, MaterialEdit, MaterialCreate } from "./pages/materials";
 import { SellerList, SellerShow, SellerEdit, PendingSellers } from "./pages/sellers";
 import { BuyerList, BuyerShow, BuyerEdit } from "./pages/buyers";
 import { RiderList, RiderShow, RiderEdit, PendingRiders } from "./pages/riders";
@@ -300,14 +300,17 @@ function App() {
               <Route path="/product-images/edit/:id" element={<ProductImageEdit />} />
 
               <Route path="/categories" element={<CategoryList />} />
+              <Route path="/categories/create" element={<CategoryCreate />} />
               <Route path="/categories/show/:id" element={<CategoryShow />} />
               <Route path="/categories/edit/:id" element={<CategoryEdit />} />
 
               <Route path="/business-types" element={<BusinessTypeList />} />
+              <Route path="/business-types/create" element={<BusinessTypeCreate />} />
               <Route path="/business-types/show/:id" element={<BusinessTypeShow />} />
               <Route path="/business-types/edit/:id" element={<BusinessTypeEdit />} />
 
               <Route path="/materials" element={<MaterialList />} />
+              <Route path="/materials/create" element={<MaterialCreate />} />
               <Route path="/materials/show/:id" element={<MaterialShow />} />
               <Route path="/materials/edit/:id" element={<MaterialEdit />} />
 

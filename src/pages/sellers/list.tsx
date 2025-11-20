@@ -11,6 +11,7 @@ export const SellerList: React.FC<IResourceComponentsProps> = () => {
       basePath="/sellers"
       columns={['id', 'name', 'email', 'businessName', 'approvalStatus', 'status', 'isVerified', 'createdAt']}
       searchPlaceholder="Search by business name, address, or phone..."
+      canCreate={false}
     />
   );
 };

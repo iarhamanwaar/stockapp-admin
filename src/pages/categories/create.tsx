@@ -2,7 +2,7 @@ import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { GenericEdit } from "../../components/GenericEdit";
 
-export const CategoryEdit: React.FC<IResourceComponentsProps> = () => {
+export const CategoryCreate: React.FC<IResourceComponentsProps> = () => {
   return (
     <GenericEdit
       resource="categories"

@@ -19,6 +19,7 @@ export const PricingList: React.FC<IResourceComponentsProps> = () => {
       ]}
       enableSearch={false}
       canDelete={false}
+      canCreate={false}
     />
   );
 };

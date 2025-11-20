@@ -12,6 +12,7 @@ export const ChatList: React.FC<IResourceComponentsProps> = () => {
       columns={['id', 'participants', 'lastMessage', 'status', 'messageCount', 'createdAt', 'updatedAt']}
       enableSearch={false}
       canDelete={false}
+      canCreate={false}
     />
   );
 };

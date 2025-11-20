@@ -11,6 +11,7 @@ export const ProductList: React.FC<IResourceComponentsProps> = () => {
       basePath="/products"
       columns={['id', 'name', 'price', 'salePrice', 'onSale', 'createdAt']}
       searchPlaceholder="Search by product name, description, or SKU..."
+      canCreate={false}
     />
   );
 };

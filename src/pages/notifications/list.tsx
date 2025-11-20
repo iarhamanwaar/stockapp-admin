@@ -11,6 +11,7 @@ export const NotificationList: React.FC<IResourceComponentsProps> = () => {
       basePath="/notifications"
       columns={['id', 'title', 'message', 'type', 'status', 'createdAt']}
       searchPlaceholder="Search by title or message..."
+      canCreate={false}
     />
   );
 };

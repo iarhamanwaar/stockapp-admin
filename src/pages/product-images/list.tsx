@@ -11,6 +11,7 @@ export const ProductImageList: React.FC<IResourceComponentsProps> = () => {
       basePath="/product-images"
       columns={['id', 'imageUrl', 'createdAt']}
       searchPlaceholder="Search by image URL..."
+      canCreate={false}
     />
   );
 };

@@ -12,6 +12,7 @@ export const TransactionList: React.FC<IResourceComponentsProps> = () => {
       columns={['id', 'amount', 'status', 'type', 'paymentMethod', 'reference', 'createdAt']}
       searchPlaceholder="Search by payment intent ID..."
       canDelete={false}
+      canCreate={false}
     />
   );
 };

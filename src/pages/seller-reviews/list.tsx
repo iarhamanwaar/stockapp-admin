@@ -11,6 +11,7 @@ export const SellerReviewList: React.FC<IResourceComponentsProps> = () => {
       basePath="/seller-reviews"
       columns={['id', 'rating', 'comment', 'status', 'sellerId', 'buyerId', 'createdAt']}
       searchPlaceholder="Search by review comment..."
+      canCreate={false}
     />
   );
 };

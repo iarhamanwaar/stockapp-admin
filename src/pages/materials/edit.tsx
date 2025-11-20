@@ -4,14 +4,15 @@ import { GenericEdit } from "../../components/GenericEdit";
 
 export const MaterialEdit: React.FC<IResourceComponentsProps> = () => {
   return (
-    <GenericEdit 
+    <GenericEdit
       resource="materials"
       title="Material"
       listPath="/materials"
       fields={[
-        { key: 'name', label: 'Name', type: 'text' },
-        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'name', label: 'Name (English)', type: 'text' },
+        { key: 'nameEs', label: 'Name (Spanish)', type: 'text' },
         { key: 'type', label: 'Type', type: 'text' },
+        { key: 'description', label: 'Description', type: 'textarea' },
       ]}
     />
   );

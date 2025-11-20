@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { EyeIcon, PencilIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, PencilIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { LoadingTable } from "@/components/ui/loading";
 import { GenericDelete } from "./GenericDelete";
@@ -34,6 +34,7 @@ interface GenericListProps extends IResourceComponentsProps {
   canDelete?: boolean; // Add option to enable/disable delete
   searchPlaceholder?: string; // Custom placeholder for search input
   enableSearch?: boolean; // Enable/disable search functionality
+  canCreate?: boolean; // Enable/disable create button
 }
 
 export const GenericList: React.FC<GenericListProps> = ({
@@ -45,6 +46,7 @@ export const GenericList: React.FC<GenericListProps> = ({
   canDelete = true, // Default to true
   searchPlaceholder = "Search...",
   enableSearch = true, // Default to true
+  canCreate = true, // Default to true
 }) => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,7 +56,11 @@ export const GenericList: React.FC<GenericListProps> = ({
       ...fieldColumns.map(field => ({
         id: field,
         accessorKey: field,
-        header: field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1'),
+        header: field === 'nameEs'
+          ? 'Name (Spanish)'
+          : field === 'name' && fieldColumns.includes('nameEs')
+          ? 'Name (English)'
+          : field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1'),
         cell: ({ getValue, row }: any) => {
           const value = getValue();
 
@@ -193,9 +199,21 @@ export const GenericList: React.FC<GenericListProps> = ({
       <Card>
         <CardHeader>
           <div className="flex flex-col gap-4">
-            <div>
-              <CardTitle>{title}</CardTitle>
-              <CardDescription>{description}</CardDescription>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+              </div>
+              {canCreate && (
+                <Button
+                  onClick={() => navigate(`${basePath}/create`)}
+                  size="sm"
+                  className="gap-2"
+                >
+                  <PlusIcon className="h-4 w-4" />
+                  Add New
+                </Button>
+              )}
             </div>
             {enableSearch && (
               <SearchInput

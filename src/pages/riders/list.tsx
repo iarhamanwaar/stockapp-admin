@@ -11,6 +11,7 @@ export const RiderList: React.FC<IResourceComponentsProps> = () => {
       basePath="/riders"
       columns={['id', 'firstName', 'lastName', 'email', 'phone', 'vehicleType', 'approvalStatus', 'isAvailable', 'status', 'createdAt']}
       searchPlaceholder="Search by name, phone, city, country, license name, or CNIC..."
+      canCreate={false}
     />
   );
 };

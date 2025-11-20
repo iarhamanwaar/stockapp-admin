@@ -11,6 +11,7 @@ export const BankList: React.FC<IResourceComponentsProps> = () => {
       basePath="/banks"
       columns={['id', 'name', 'code', 'description', 'createdAt']}
       searchPlaceholder="Search by bank name..."
+      canCreate={false}
     />
   );
 };

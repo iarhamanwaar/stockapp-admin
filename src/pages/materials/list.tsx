@@ -7,10 +7,10 @@ export const MaterialList: React.FC<IResourceComponentsProps> = () => {
     <GenericList
       resource="materials"
       title="Materials"
-      description="Manage materials"
+      description="Manage materials with bilingual support (English/Spanish)"
       basePath="/materials"
-      columns={['id', 'name', 'description', 'type', 'isActive', 'createdAt']}
-      searchPlaceholder="Search by material name..."
+      columns={['id', 'name', 'nameEs', 'description', 'type', 'isActive', 'createdAt']}
+      searchPlaceholder="Search by material name (English or Spanish)..."
     />
   );
 };
