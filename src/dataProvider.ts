@@ -52,7 +52,9 @@ const getApiEndpoint = (resource: string, id?: string | number) => {
     "chats": "chats",
     "messages": "messages",
     "banks": "banks",
-    "pricing": "pricing"
+    "pricing": "pricing",
+    "chat-reports": "reports/chat",
+    "product-reports": "reports/product",
   };
 
   const endpoint = endpointMap[resource] || resource;

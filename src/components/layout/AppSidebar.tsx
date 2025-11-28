@@ -34,7 +34,9 @@ import {
   ArrowLeftStartOnRectangleIcon,
   CubeIcon,
   BuildingOffice2Icon,
-  Squares2X2Icon
+  Squares2X2Icon,
+  FlagIcon,
+  ExclamationTriangleIcon,
 } from "@heroicons/react/24/outline";
 
 const iconMap: Record<string, React.ComponentType<any>> = {
@@ -56,6 +58,8 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   "chats": ChatBubbleLeftRightIcon,
   "messages": EnvelopeIcon,
   "banks": BuildingLibraryIcon,
+  "chat-reports": FlagIcon,
+  "product-reports": ExclamationTriangleIcon,
 };
 
 export const AppSidebar: React.FC = () => {

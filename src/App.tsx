@@ -26,6 +26,7 @@ import { ChatList, ChatShow } from "./pages/chats";
 import { MessageList, MessageShow } from "./pages/messages";
 import { BankList, BankShow, BankEdit } from "./pages/banks";
 import { PricingList, PricingShow, PricingEdit } from "./pages/pricing";
+import { ChatReportList, ChatReportShow, ProductReportList, ProductReportShow } from "./pages/reports";
 import { Dashboard } from "./pages/dashboard";
 
 function App() {
@@ -257,6 +258,24 @@ function App() {
                 label: "Pricing Config",
               },
             },
+            {
+              name: "chat-reports",
+              list: "/reports/chat",
+              show: "/reports/chat/show/:id",
+              meta: {
+                canDelete: false,
+                label: "Chat Reports",
+              },
+            },
+            {
+              name: "product-reports",
+              list: "/reports/product",
+              show: "/reports/product/show/:id",
+              meta: {
+                canDelete: false,
+                label: "Product Reports",
+              },
+            },
           ]}
           options={{
             syncWithLocation: true,
@@ -357,6 +376,12 @@ function App() {
               <Route path="/pricing" element={<PricingList />} />
               <Route path="/pricing/show/:id" element={<PricingShow />} />
               <Route path="/pricing/edit/:id" element={<PricingEdit />} />
+
+              <Route path="/reports/chat" element={<ChatReportList />} />
+              <Route path="/reports/chat/show/:id" element={<ChatReportShow />} />
+
+              <Route path="/reports/product" element={<ProductReportList />} />
+              <Route path="/reports/product/show/:id" element={<ProductReportShow />} />
 
               <Route path="*" element={<ErrorComponent />} />
             </Route>
