@@ -13,6 +13,7 @@ import { RiderWithApproval } from "@/types/approval";
 import { ApprovalStatusBadge } from "@/components/ApprovalStatusBadge";
 import { DocumentViewer } from "@/components/DocumentViewer";
 import { ApprovalActions } from "@/components/ApprovalActions";
+import { PayoutInfoCard } from "@/components/PayoutInfoCard";
 
 export const RiderShow: React.FC<IResourceComponentsProps> = () => {
   const navigate = useNavigate();
@@ -253,6 +254,9 @@ export const RiderShow: React.FC<IResourceComponentsProps> = () => {
         </Card>
       )}
 
+      {/* Payout Information Section */}
+      <PayoutInfoCard payoutInfo={record?.payoutInfo} />
+
       {/* Basic Information Section */}
       <Card>
         <CardHeader>
@@ -286,35 +290,6 @@ export const RiderShow: React.FC<IResourceComponentsProps> = () => {
               <label className="text-sm font-medium text-muted-foreground">Vehicle Type</label>
               <div className="text-sm">{record?.vehicleType || "N/A"}</div>
             </div>
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">Available</label>
-              <div className="text-sm">
-                <Badge variant={record?.isAvailable ? 'default' : 'secondary'}>
-                  {record?.isAvailable ? "Available" : "Unavailable"}
-                </Badge>
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">Status</label>
-              <div className="text-sm">
-                <Badge variant={
-                  record?.status === 'active' ? 'default' :
-                  record?.status === 'inactive' ? 'secondary' : 'destructive'
-                }>
-                  {record?.status || "Unknown"}
-                </Badge>
-              </div>
-            </div>
-            {record?.isVerified !== undefined && (
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">Verified</label>
-                <div className="text-sm">
-                  <Badge variant={record.isVerified ? 'default' : 'destructive'}>
-                    {record.isVerified ? "Verified" : "Not Verified"}
-                  </Badge>
-                </div>
-              </div>
-            )}
             <div>
               <label className="text-sm font-medium text-muted-foreground">Created At</label>
               <div className="text-sm">

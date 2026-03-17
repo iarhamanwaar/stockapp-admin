@@ -13,6 +13,7 @@ import { SellerWithApproval } from "@/types/approval";
 import { ApprovalStatusBadge } from "@/components/ApprovalStatusBadge";
 import { DocumentViewer } from "@/components/DocumentViewer";
 import { ApprovalActions } from "@/components/ApprovalActions";
+import { PayoutInfoCard } from "@/components/PayoutInfoCard";
 
 export const SellerShow: React.FC<IResourceComponentsProps> = () => {
   const navigate = useNavigate();
@@ -280,6 +281,9 @@ export const SellerShow: React.FC<IResourceComponentsProps> = () => {
         </Card>
       )}
 
+      {/* Payout Information Section */}
+      <PayoutInfoCard payoutInfo={record?.payoutInfo} />
+
       {/* Basic Information Section */}
       <Card>
         <CardHeader>
@@ -315,25 +319,6 @@ export const SellerShow: React.FC<IResourceComponentsProps> = () => {
             <div>
               <label className="text-sm font-medium text-muted-foreground">Contact Person</label>
               <div className="text-sm">{record?.contactPerson || "N/A"}</div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">Status</label>
-              <div className="text-sm">
-                <Badge variant={
-                  record?.status === 'active' ? 'default' :
-                  record?.status === 'inactive' ? 'secondary' : 'destructive'
-                }>
-                  {record?.status || "Unknown"}
-                </Badge>
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">Verified</label>
-              <div className="text-sm">
-                <Badge variant={record?.isVerified ? 'default' : 'destructive'}>
-                  {record?.isVerified ? "Verified" : "Not Verified"}
-                </Badge>
-              </div>
             </div>
             <div>
               <label className="text-sm font-medium text-muted-foreground">Created At</label>

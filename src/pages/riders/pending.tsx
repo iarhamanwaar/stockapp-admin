@@ -19,22 +19,18 @@ export const PendingRiders: React.FC<IResourceComponentsProps> = () => {
 
   const { data, isLoading, refetch } = useList<RiderWithApproval>({
     resource: "riders",
-    filters: [
-      {
-        field: "approvalStatus",
-        operator: "eq",
-        value: "pending",
-      },
-    ],
     pagination: {
-      pageSize: 50,
+      pageSize: 100,
     },
   });
 
   const { mutate: approve } = useCustomMutation();
   const { mutate: reject } = useCustomMutation();
 
-  const pendingRiders = data?.data || [];
+  const allRiders = data?.data || [];
+  const pendingRiders = allRiders.filter(
+    (rider) => rider.approvalStatus !== 'approved'
+  );
 
   const handleApprove = (riderId: string) => {
     setProcessingId(riderId);

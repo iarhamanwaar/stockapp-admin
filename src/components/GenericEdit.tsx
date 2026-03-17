@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoadingSpinner, LoadingCard } from "@/components/ui/loading";
@@ -19,7 +20,7 @@ interface GenericEditProps extends IResourceComponentsProps {
   resource: string;
   title: string;
   listPath: string;
-  fields: { key: string; label: string; type: 'text' | 'textarea' | 'email' | 'number' }[];
+  fields: { key: string; label: string; type: 'text' | 'textarea' | 'email' | 'number' | 'select'; options?: { value: string; label: string }[] }[];
 }
 
 export const GenericEdit: React.FC<GenericEditProps> = ({ 
@@ -201,7 +202,24 @@ export const GenericEdit: React.FC<GenericEditProps> = ({
               {fields.map((field) => (
                 <div key={field.key} className="space-y-2">
                   <Label htmlFor={field.key}>{field.label}</Label>
-                  {field.type === 'textarea' ? (
+                  {field.type === 'select' && field.options ? (
+                    <Select
+                      value={formData[field.key] || undefined}
+                      onValueChange={(value) => handleInputChange(field.key, value)}
+                      disabled={isSubmitting}
+                    >
+                      <SelectTrigger id={field.key}>
+                        <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {field.options.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : field.type === 'textarea' ? (
                     <Textarea
                       id={field.key}
                       value={formData[field.key] || ''}

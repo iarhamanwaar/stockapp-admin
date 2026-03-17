@@ -2,6 +2,13 @@
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'under_review';
 
+export const APPROVAL_STATUS_OPTIONS = [
+  { value: 'pending', label: 'Application Submitted' },
+  { value: 'under_review', label: 'Validation in Progress' },
+  { value: 'rejected', label: 'Action Required' },
+  { value: 'approved', label: 'Approved' },
+];
+
 export interface DocumentInfo {
   url: string;
   fileName: string;
@@ -71,6 +78,7 @@ export interface SellerWithApproval {
   selfieUrl?: string;
   taxDocumentUrl?: string;
   proofOfAddressUrl?: string;
+  payoutInfo?: PayoutInfo;
   user?: {
     id: string;
     email: string;
@@ -103,11 +111,22 @@ export interface RiderWithApproval {
   driverLicenceFrontUrl?: string;
   driverLicenceBackUrl?: string;
   selfieUrl?: string;
+  payoutInfo?: PayoutInfo;
   user?: {
     id: string;
     email: string;
     isVerified?: boolean;
   };
+}
+
+export interface PayoutInfo {
+  method: string | null;
+  stripeAccountId: string | null;
+  connectStatus: 'pending' | 'active' | 'restricted' | 'rejected' | null;
+  chargesEnabled: boolean;
+  payoutsEnabled: boolean;
+  paypalEmail: string | null;
+  cardLast4: string | null;
 }
 
 export interface ApprovalActionPayload {

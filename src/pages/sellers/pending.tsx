@@ -18,22 +18,18 @@ export const PendingSellers: React.FC<IResourceComponentsProps> = () => {
 
   const { data, isLoading, refetch } = useList<SellerWithApproval>({
     resource: "sellers",
-    filters: [
-      {
-        field: "approvalStatus",
-        operator: "eq",
-        value: "pending",
-      },
-    ],
     pagination: {
-      pageSize: 50,
+      pageSize: 100,
     },
   });
 
   const { mutate: approve } = useCustomMutation();
   const { mutate: reject } = useCustomMutation();
 
-  const pendingSellers = data?.data || [];
+  const allSellers = data?.data || [];
+  const pendingSellers = allSellers.filter(
+    (seller) => seller.approvalStatus !== 'approved'
+  );
 
   const handleApprove = (sellerId: string) => {
     setProcessingId(sellerId);

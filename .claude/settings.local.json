@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(npm run build:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(grep -r \"transform\\\\|map\\\\|format\\\\|convert\" /Users/tecaudexoffice/WebstormProjects/stockapp-admin/src --include=*.ts --include=*.tsx)"
     ],
     "deny": [],
     "ask": []

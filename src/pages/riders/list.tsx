@@ -9,7 +9,7 @@ export const RiderList: React.FC<IResourceComponentsProps> = () => {
       title="Riders"
       description="Manage delivery riders"
       basePath="/riders"
-      columns={['id', 'firstName', 'lastName', 'email', 'phone', 'vehicleType', 'approvalStatus', 'isAvailable', 'status', 'createdAt']}
+      columns={['id', 'firstName', 'lastName', 'email', 'phone', 'vehicleType', 'approvalStatus', 'isAvailable', 'createdAt']}
       searchPlaceholder="Search by name, phone, city, country, license name, or CNIC..."
       canCreate={false}
     />

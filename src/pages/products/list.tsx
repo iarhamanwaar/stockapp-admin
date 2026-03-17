@@ -9,7 +9,7 @@ export const ProductList: React.FC<IResourceComponentsProps> = () => {
       title="Products"
       description="Manage product catalog"
       basePath="/products"
-      columns={['id', 'name', 'price', 'salePrice', 'onSale', 'createdAt']}
+      columns={['images', 'id', 'name', 'price', 'salePrice', 'onSale', 'createdAt']}
       searchPlaceholder="Search by product name, description, or SKU..."
       canCreate={false}
     />

@@ -96,9 +96,76 @@ export const GenericShow: React.FC<GenericShowProps> = ({
     );
   }
 
+  const isImageUrl = (key: string, value: any): boolean => {
+    if (typeof value !== 'string') return false;
+    const lowerKey = key.toLowerCase();
+    if (lowerKey.includes('image') || lowerKey.includes('img') || lowerKey.includes('photo') || lowerKey.includes('thumbnail') || lowerKey.includes('avatar')) {
+      return true;
+    }
+    if (/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i.test(value)) {
+      return true;
+    }
+    return false;
+  };
+
+  const isImageArray = (key: string, value: any): boolean => {
+    if (!Array.isArray(value) || value.length === 0) return false;
+    const lowerKey = key.toLowerCase();
+    if (lowerKey.includes('image') || lowerKey.includes('img') || lowerKey.includes('photo') || lowerKey.includes('gallery')) {
+      return value.some((v: any) => typeof v === 'string' || (typeof v === 'object' && v?.imageUrl));
+    }
+    return false;
+  };
+
   const renderValue = (key: string, value: any) => {
     if (value === null || value === undefined) return "N/A";
-    
+
+    // Handle image arrays (e.g. images: [{imageUrl: "..."}, ...] or ["url1", "url2"])
+    if (isImageArray(key, value)) {
+      const urls = (value as any[])
+        .map((v: any) => (typeof v === 'string' ? v : v?.imageUrl))
+        .filter(Boolean);
+      if (urls.length === 0) return "N/A";
+      return (
+        <div className="flex flex-wrap gap-2 mt-1">
+          {urls.map((url: string, i: number) => (
+            <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+              <img
+                src={url}
+                alt={`${key} ${i + 1}`}
+                className="h-24 w-24 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            </a>
+          ))}
+        </div>
+      );
+    }
+
+    // Handle single image URLs
+    if (isImageUrl(key, value)) {
+      return (
+        <div className="mt-1">
+          <a href={value} target="_blank" rel="noopener noreferrer">
+            <img
+              src={value}
+              alt={key}
+              className="h-32 w-32 object-cover rounded-lg border border-gray-200 hover:opacity-80 transition-opacity"
+              onError={(e) => {
+                const img = e.target as HTMLImageElement;
+                img.style.display = 'none';
+                if (img.nextSibling) return;
+                const fallback = document.createElement('span');
+                fallback.className = 'text-sm text-muted-foreground';
+                fallback.textContent = value;
+                img.parentElement?.appendChild(fallback);
+              }}
+            />
+          </a>
+        </div>
+      );
+    }
+
     if (typeof value === "boolean") {
       return (
         <Badge variant={value ? 'default' : 'destructive'}>
@@ -106,15 +173,60 @@ export const GenericShow: React.FC<GenericShowProps> = ({
         </Badge>
       );
     }
-    
+
     if (key.includes("date") || key.includes("At")) {
       return new Date(value).toLocaleString();
     }
-    
+
     if (key.includes("status")) {
       return <Badge>{value}</Badge>;
     }
-    
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) return 'N/A';
+      // Array of objects - render as readable list
+      if (typeof value[0] === 'object' && value[0] !== null) {
+        return (
+          <div className="space-y-2 mt-1">
+            {value.map((item: any, i: number) => (
+              <div key={i} className="bg-gray-50 rounded p-2 text-xs">
+                {Object.entries(item)
+                  .filter(([k]) => !['id', 'deletedAt', 'createdAt', 'updatedAt'].includes(k))
+                  .map(([k, v]) => (
+                    <div key={k}>
+                      <span className="font-medium capitalize">{k.replace(/([A-Z])/g, ' $1').trim()}:</span>{' '}
+                      {v === null || v === undefined ? 'N/A' : String(v)}
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+        );
+      }
+      return value.join(', ') || 'N/A';
+    }
+
+    // Handle nested objects - extract meaningful display value
+    if (typeof value === 'object' && value !== null) {
+      const displayValue = value.name || value.businessName || value.email || value.title || value.label;
+      if (displayValue) {
+        return String(displayValue);
+      }
+      // Render key-value pairs for objects like stockInfo
+      return (
+        <div className="bg-gray-50 rounded p-2 text-xs mt-1 space-y-1">
+          {Object.entries(value)
+            .filter(([k]) => !['id', 'deletedAt', 'createdAt', 'updatedAt'].includes(k))
+            .map(([k, v]) => (
+              <div key={k}>
+                <span className="font-medium capitalize">{k.replace(/([A-Z])/g, ' $1').trim()}:</span>{' '}
+                {v === null || v === undefined ? 'N/A' : typeof v === 'boolean' ? (v ? 'Yes' : 'No') : String(v)}
+              </div>
+            ))}
+        </div>
+      );
+    }
+
     return value.toString();
   };
 
@@ -169,14 +281,25 @@ export const GenericShow: React.FC<GenericShowProps> = ({
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {record && Object.entries(record).map(([key, value]) => (
-              <div key={key}>
-                <label className="text-sm font-medium text-muted-foreground capitalize">
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </label>
-                <div className="text-sm">{renderValue(key, value)}</div>
-              </div>
-            ))}
+            {record && Object.entries(record)
+              .filter(([key]) => {
+                // Skip redundant ID fields when the related object is present
+                if (key === 'categoryId' && record.category) return false;
+                if ((key === 'userId' || key === 'supplierId') && record.user) return false;
+                return true;
+              })
+              .map(([key, value]) => {
+              const isImg = isImageUrl(key, value) || isImageArray(key, value);
+              const isWide = isImg || (typeof value === 'object' && value !== null && !Array.isArray(value) && !(value as any).name && !(value as any).email);
+              return (
+                <div key={key} className={isWide ? 'md:col-span-2' : ''}>
+                  <label className="text-sm font-medium text-muted-foreground capitalize">
+                    {key === 'user' ? 'Supplier' : key.replace(/([A-Z])/g, ' $1').trim()}
+                  </label>
+                  <div className="text-sm">{renderValue(key, value)}</div>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

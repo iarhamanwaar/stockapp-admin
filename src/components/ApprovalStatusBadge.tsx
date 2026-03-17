@@ -10,13 +10,13 @@ interface ApprovalStatusBadgeProps {
 export const ApprovalStatusBadge: React.FC<ApprovalStatusBadgeProps> = ({
   status,
   size = 'md',
-  showIcon = true
+  showIcon = false
 }) => {
   const getStatusConfig = (status: ApprovalStatus) => {
     switch (status) {
       case 'pending':
         return {
-          label: 'Pending Approval',
+          label: 'Application Submitted',
           className: 'bg-yellow-100 text-yellow-800 border-yellow-300',
           icon: '⏳'
         };
@@ -28,15 +28,15 @@ export const ApprovalStatusBadge: React.FC<ApprovalStatusBadgeProps> = ({
         };
       case 'rejected':
         return {
-          label: 'Rejected',
+          label: 'Action Required',
           className: 'bg-red-100 text-red-800 border-red-300',
           icon: '✗'
         };
       case 'under_review':
         return {
-          label: 'Under Review',
+          label: 'Validation in Progress',
           className: 'bg-blue-100 text-blue-800 border-blue-300',
-          icon: '👁'
+          icon: '🔄'
         };
       default:
         return {

@@ -15,9 +15,9 @@ import { ProductImageList, ProductImageShow, ProductImageEdit } from "./pages/pr
 import { CategoryList, CategoryShow, CategoryEdit, CategoryCreate } from "./pages/categories";
 import { BusinessTypeList, BusinessTypeShow, BusinessTypeEdit, BusinessTypeCreate } from "./pages/business-types";
 import { MaterialList, MaterialShow, MaterialEdit, MaterialCreate } from "./pages/materials";
-import { SellerList, SellerShow, SellerEdit, PendingSellers } from "./pages/sellers";
+import { SellerList, SellerShow, SellerEdit } from "./pages/sellers";
 import { BuyerList, BuyerShow, BuyerEdit } from "./pages/buyers";
-import { RiderList, RiderShow, RiderEdit, PendingRiders } from "./pages/riders";
+import { RiderList, RiderShow, RiderEdit } from "./pages/riders";
 import { ProductReviewList, ProductReviewShow, ProductReviewEdit } from "./pages/product-reviews";
 import { SellerReviewList, SellerReviewShow, SellerReviewEdit } from "./pages/seller-reviews";
 import { TransactionList, TransactionShow, TransactionEdit } from "./pages/transactions";
@@ -134,15 +134,6 @@ function App() {
               },
             },
             {
-              name: "pending-sellers",
-              list: "/sellers/pending",
-              show: "/sellers/show/:id",
-              meta: {
-                label: "Pending Sellers",
-                icon: "⏳",
-              },
-            },
-            {
               name: "buyers",
               list: "/buyers",
               create: "/buyers/create",
@@ -162,15 +153,6 @@ function App() {
               meta: {
                 canDelete: true,
                 label: "Riders",
-              },
-            },
-            {
-              name: "pending-riders",
-              list: "/riders/pending",
-              show: "/riders/show/:id",
-              meta: {
-                label: "Pending Riders",
-                icon: "⏳",
               },
             },
             {
@@ -333,7 +315,6 @@ function App() {
               <Route path="/materials/show/:id" element={<MaterialShow />} />
               <Route path="/materials/edit/:id" element={<MaterialEdit />} />
 
-              <Route path="/sellers/pending" element={<PendingSellers />} />
               <Route path="/sellers" element={<SellerList />} />
               <Route path="/sellers/show/:id" element={<SellerShow />} />
               <Route path="/sellers/edit/:id" element={<SellerEdit />} />
@@ -342,7 +323,6 @@ function App() {
               <Route path="/buyers/show/:id" element={<BuyerShow />} />
               <Route path="/buyers/edit/:id" element={<BuyerEdit />} />
 
-              <Route path="/riders/pending" element={<PendingRiders />} />
               <Route path="/riders" element={<RiderList />} />
               <Route path="/riders/show/:id" element={<RiderShow />} />
               <Route path="/riders/edit/:id" element={<RiderEdit />} />

@@ -60,31 +60,74 @@ export const GenericList: React.FC<GenericListProps> = ({
           ? 'Name (Spanish)'
           : field === 'name' && fieldColumns.includes('nameEs')
           ? 'Name (English)'
+          : field === 'imageUrl' || field === 'images'
+          ? 'Image'
           : field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1'),
         cell: ({ getValue, row }: any) => {
           const value = getValue();
 
-          // Handle approval status - show as Approved/Not Approved text with badge
+          // Handle approval status - show with ApprovalStatusBadge
           if (field === 'approvalStatus') {
-            // Use approvalStatus if available, otherwise fallback to isVerified
-            let isApproved = false;
             if (value) {
-              isApproved = value === 'approved';
-            } else if (row.original.isVerified !== undefined) {
-              // Fallback to isVerified if no approvalStatus
-              isApproved = row.original.isVerified === true;
+              return <ApprovalStatusBadge status={value} size="sm" />;
             }
-
-            return (
-              <Badge variant={isApproved ? 'default' : 'destructive'} className="whitespace-nowrap">
-                {isApproved ? "Approved" : "Not Approved"}
-              </Badge>
-            );
+            return <Badge variant="secondary">Unknown</Badge>;
           }
 
           // Handle isVerified field - always show N/A
           if (field === 'isVerified') {
             return <span className="text-muted-foreground">N/A</span>;
+          }
+
+          // Handle images array (array of objects with imageUrl) - show first as thumbnail
+          if (field === 'images' && Array.isArray(value) && value.length > 0) {
+            const imgUrl = value[0]?.imageUrl;
+            if (imgUrl) {
+              return (
+                <a href={imgUrl} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={imgUrl}
+                    alt="Product"
+                    className="h-12 w-12 object-cover rounded border border-gray-200 hover:opacity-80 transition-opacity"
+                    onError={(e) => {
+                      const img = e.target as HTMLImageElement;
+                      img.style.display = 'none';
+                      const fallback = document.createElement('span');
+                      fallback.className = 'text-xs text-muted-foreground';
+                      fallback.textContent = 'No image';
+                      img.parentElement?.appendChild(fallback);
+                    }}
+                  />
+                </a>
+              );
+            }
+            return <span className="text-muted-foreground">No image</span>;
+          }
+
+          // Handle image URL fields - show thumbnail
+          const lowerField = field.toLowerCase();
+          if (
+            typeof value === 'string' && value &&
+            (lowerField.includes('image') || lowerField.includes('img') || lowerField.includes('photo') || lowerField.includes('thumbnail') || lowerField.includes('avatar') ||
+            /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg|bmp)(\?.*)?$/i.test(value))
+          ) {
+            return (
+              <a href={value} target="_blank" rel="noopener noreferrer">
+                <img
+                  src={value}
+                  alt={field}
+                  className="h-12 w-12 object-cover rounded border border-gray-200 hover:opacity-80 transition-opacity"
+                  onError={(e) => {
+                    const img = e.target as HTMLImageElement;
+                    img.style.display = 'none';
+                    const fallback = document.createElement('span');
+                    fallback.className = 'text-xs text-muted-foreground truncate max-w-[200px] inline-block';
+                    fallback.textContent = 'Image failed';
+                    img.parentElement?.appendChild(fallback);
+                  }}
+                />
+              </a>
+            );
           }
 
           // Handle different data types
